@@ -13,6 +13,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
 
+import api from "../../services/api";
+
+
 const useStyles = makeStyles((theme) => ({
     field: {
         width: "100%",
@@ -27,6 +30,16 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
     },
 }));
+
+ 
+async function teste_backend() {
+    try {
+        const response = await api.get("/");
+        console.log(response.data);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export default function SignIn() {
     const classes = useStyles();
@@ -47,7 +60,8 @@ export default function SignIn() {
                         variant="outlined"
                         // onChange={handleChange}
                         className={classes.field}
-                        // value={email}
+                        value={teste_backend()}
+
                     />
                     <PasswordContainer>
                         <TextField
@@ -72,6 +86,7 @@ export default function SignIn() {
                                 <VisibilityOffIcon />
                             )} */}
                             TESTE
+                            
                         </Button>
                     </PasswordContainer>
                     <Button
