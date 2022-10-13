@@ -15,7 +15,6 @@ import makeStyles from "@mui/styles/makeStyles";
 
 import api from "../../services/api";
 
-
 const useStyles = makeStyles((theme) => ({
     field: {
         width: "100%",
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
- 
 async function teste_backend() {
     try {
         const response = await api.get("/");
@@ -61,7 +59,6 @@ export default function SignIn() {
                         // onChange={handleChange}
                         className={classes.field}
                         value={teste_backend()}
-
                     />
                     <PasswordContainer>
                         <TextField
@@ -86,14 +83,13 @@ export default function SignIn() {
                                 <VisibilityOffIcon />
                             )} */}
                             TESTE
-                            
                         </Button>
                     </PasswordContainer>
                     <Button
                         className={classes.login}
                         //onClick={handleSubmitForgotPassword}
                     >
-                        Enviar
+                        Entrar
                     </Button>
                 </FieldsContainer>
             </Container>{" "}
