@@ -1,5 +1,5 @@
 /* Styles */
-import { Container, Title } from "./questions.styles";
+import { Container, Title, Row1Modal, Row2Modal } from "./questions.styles";
 
 /* Material UI*/
 import EditIcon from "@mui/icons-material/Edit";
@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { lightGreen, red } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import * as React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -26,6 +26,16 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import makeStyles from "@mui/styles/makeStyles";
+import TextField from "@mui/material/TextField";
+
+// API
+//import { findAllQuestions } from "../../api/ApiQuestions";
+
+//Context
+//import { AuthProvider } from "../../contexts/AuthContext";
 
 const theme = createTheme({
     palette: {
@@ -33,6 +43,58 @@ const theme = createTheme({
         secondary: { main: red[600] },
     },
 });
+
+const useStyles = makeStyles((theme) => ({
+    titleEdit: {
+        fontSize: "24px",
+        fontWeight: 900,
+        padding: "20px 10px 0px 10px",
+        color: "#444446",
+        fontFamily: "Roboto",
+    },
+    paperModal: {
+        marginTop: "10%",
+        marginLeft: "50%",
+        transform: "translateX(-50%)",
+        width: 600,
+        maxHeight: 800,
+        border: "1px solid grey",
+        borderRadius: "10px",
+        boxShadow:
+            "0px 2.075px 4.15px rgba(0, 0, 0, 0.16), 0px 4.15px 8.3px rgba(0, 0, 0, 0.12), 0px 2.075px 16.6px rgba(0, 0, 0, 0.1)",
+        padding: "2rem 0",
+        fontFamily: "Roboto",
+        textAlign: "center",
+        "@media (max-width: 680px)": {
+            marginTop: "80%",
+            transform: "translate(-50%, -50%) scale(0.7)",
+        },
+    },
+    buttonModal: {
+        width: "10rem",
+        background: "#e0645e",
+        height: "55px",
+        right: 20,
+        textTransform: "inherit",
+        float: "center",
+        fontFamily: "Roboto",
+        fontWeight: 700,
+        marginLeft: "4rem",
+        marginTop: "1rem",
+        fontSize: 15,
+        transform: "translate(-1rem, -12px) scale(0.9)",
+        borderRadius: "15px",
+        padding: "20px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
+    },
+    textControl: {
+        width: "50%",
+        "@media (max-width: 680px)": {
+            width: "80%",
+            padding: 10,
+        },
+    },
+}));
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -132,8 +194,83 @@ const rows = [
 ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 export default function QuestionsData() {
+    //const { auth } = useContext(AuthProvider);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [open, setOpen] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [questionTitle, setQuestionTitle] = useState("");
+    const classes = useStyles();
+    const [questions, setQuestions] = useState([]);
+    const [openRemove, setOpenRemove] = useState(false);
+
+    // useEffect(() => {
+    //     const callApiFindAllQuestions = async () => {
+    //         const response = await findAllQuestions(
+    //             auth,
+    //             auth.data.user.stateId,
+    //         );
+
+    //         const { message, payload } = response.data;
+
+    //         if (response.status !== 200) throw Error(message);
+
+    //         const data = [];
+    //         Object.entries(payload[0].question).map((curr) =>
+    //             data.push({ name: curr[0], value: curr[1] }),
+    //         );
+    //         setQuestions(data);
+    //     };
+
+    //     try {
+    //         callApiFindAllQuestions();
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }, [auth]);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpenEdit = () => {
+        setOpenEdit(true);
+    };
+
+    const handleCloseEdit = () => {
+        setOpenEdit(false);
+    };
+
+    const handleOpenRemove = () => {
+        setOpenRemove(true);
+    };
+
+    const handleCloseRemove = () => {
+        setOpenRemove(false);
+    };
+
+    // const handleOpenRemove = (name) => {
+    //     setOpenRemove(true);
+    //     setCurrent(name);
+    // };
+
+    // const handleCloseRemove = () => {
+    //     setOpenRemove(false);
+    // };
+
+    // const handleOpenEdit = (name, value) => {
+    //     setOpenEdit(true);
+    //     setCurrentFertilizerName(name);
+    //     setCurrentFertilizerValue(value);
+    // };
+
+    // const handleCloseEdit = () => {
+    //     setOpenEdit(false);
+    // };
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -148,15 +285,111 @@ export default function QuestionsData() {
         setPage(0);
     };
 
+    const body = (
+        <div className={classes.paperModal}>
+            <h2 id="simple-modal-title" className={classes.titleEdit}>
+                Adicionar nova pergunta
+            </h2>
+            <TextField
+                id="new-question"
+                className={classes.textControl}
+                label="Pergunta"
+                style={{ margin: 8 }}
+                placeholder="Informe aqui"
+                margin="normal"
+                type="text"
+                value={questionTitle}
+                onChange={(event) => setQuestionTitle(event.target.value)}
+            />
+            <ThemeProvider theme={theme}>
+                <Button
+                    variant="contained"
+                    color={"secondary"}
+                    className={classes.buttonModal}
+                    //onClick={handleNewQuestion}
+                >
+                    Adicionar
+                    {<AddIcon />}
+                </Button>
+            </ThemeProvider>
+        </div>
+    );
+
+    const editBody = (
+        <div className={classes.paperModal}>
+            <h2 id="simple-modal-title" className={classes.titleEdit}>
+                Editar pergunta
+            </h2>
+
+            <TextField
+                id="new-question"
+                className={classes.textControl}
+                label="Pergunta"
+                style={{ margin: 8 }}
+                placeholder="Informe aqui"
+                margin="normal"
+                type="text"
+                value={questionTitle}
+                onChange={(event) => setQuestionTitle(event.target.value)}
+            />
+            <ThemeProvider theme={theme}>
+                <Button
+                    variant="contained"
+                    color={"secondary"}
+                    className={classes.buttonModal}
+                    //onClick={handleEditQuestion}
+                >
+                    Editar
+                </Button>
+            </ThemeProvider>
+        </div>
+    );
+
+    const deleteBody = (
+        <div className={classes.paperModal}>
+            <h2 id="simple-modal-title" className={classes.titleEdit}>
+                Remover esta pergunta?
+            </h2>
+            <Row1Modal>
+                <ThemeProvider theme={theme}>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="primary"
+                        type="button"
+                        className={classes.buttonModalRemove}
+                        //onClick={handleRemoveQuestion}
+                    >
+                        <span className={classes.titleButton}>Remover</span>
+                    </Button>
+                </ThemeProvider>
+            </Row1Modal>
+            <Row2Modal>
+                <ThemeProvider theme={theme}>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="secondary"
+                        type="button"
+                        className={classes.buttonModalRemoveNot}
+                        onClick={handleCloseRemove}
+                    >
+                        <span className={classes.titleButton}>Cancelar</span>
+                    </Button>
+                </ThemeProvider>
+            </Row2Modal>
+        </div>
+    );
+
     return (
         <Container component={Paper}>
             <Title variant="h6" component="div">
-                Perguntas
+                {"Menu de Perguntas"}
             </Title>
             <ThemeProvider theme={theme}>
                 <Button
                     variant="contained"
-
+                    onClick={handleOpen}
                     //onClick={handleOpen}
                 >
                     {<AddIcon> </AddIcon>} Nova Pergunta
@@ -177,10 +410,12 @@ export default function QuestionsData() {
                             </TableCell>
 
                             <TableCell style={{ width: 160 }} align="right">
-                                <EditIcon />
+                                <EditIcon onClick={() => handleOpenEdit()} />
                             </TableCell>
                             <TableCell style={{ width: 160 }} align="center">
-                                <DeleteIcon />
+                                <DeleteIcon
+                                    onClick={() => handleOpenRemove()}
+                                />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -217,6 +452,30 @@ export default function QuestionsData() {
                     </TableRow>
                 </TableFooter>
             </Table>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                {body}
+            </Modal>
+            <Modal
+                open={openEdit}
+                onClose={handleCloseEdit}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                {editBody}
+            </Modal>
+            <Modal
+                open={openRemove}
+                onClose={handleCloseRemove}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                {deleteBody}
+            </Modal>
         </Container>
     );
 }

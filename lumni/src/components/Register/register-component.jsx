@@ -4,7 +4,7 @@ import {
     MainTitle,
     FieldsContainer,
     PasswordContainer,
-} from "./sign-in.styles";
+} from "./register.styles";
 
 /* Componentes */
 
@@ -17,7 +17,6 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 
 import api from "../../services/api";
-import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     field: {
@@ -34,18 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-async function teste_backend() {
-    try {
-        const response = await api.get("/");
-        console.log(response.data);
-    } catch (error) {
-        console.log(error);
-    }
-}
-teste_backend();
-
-export default function SignIn() {
+export default function Register() {
     const { authenticated, login, logout } = useContext(AuthContext);
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const classes = useStyles();
@@ -64,6 +54,18 @@ export default function SignIn() {
                 <MainTitle> Lumni </MainTitle>{" "}
                 <FieldsContainer>
                     {" aaa " + authenticated}
+                    <TextField
+                        id="email-input-login"
+                        name="nome"
+                        color="secondary"
+                        label="Nome"
+                        type="name"
+                        variant="outlined"
+                        // onChange={handleChange}
+                        className={classes.field}
+                        value={name}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                     <TextField
                         id="email-input-login"
                         name="email"
@@ -90,29 +92,10 @@ export default function SignIn() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         ></TextField>
-                        <Button
-                        // className={classes.showPassword}
-                        // onClick={togglePassword}
-                        >
-                            {/* {showPassword ? (
-                                <VisibilityIcon />
-                            ) : (
-                                <VisibilityOffIcon />
-                            )} */}
-                            TESTE
-                        </Button>
                     </PasswordContainer>
                     <Button className={classes.login} onClick={handleSubmit}>
-                        Entrar
+                        Cadastrar
                     </Button>
-                    <NavLink to="/register">
-                        <Button
-                            className={classes.login}
-                            //onClick={handleSubmitRegister}
-                        >
-                            Cadastrar
-                        </Button>
-                    </NavLink>
                 </FieldsContainer>
             </Container>{" "}
         </>

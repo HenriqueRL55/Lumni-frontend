@@ -1,51 +1,59 @@
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 
-import {Routes,Route, Navigate} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { SignInPage } from "../pages/sign-in/sign-in.component";
 import { Dashboard } from "../pages/dashboard/dashboard.component";
 import { Questions } from "../pages/questions/questions.component";
 
 import { AuthProvider, AuthContext } from "../context/auth";
-
+import { RegisterPage } from "../pages/register/register.component";
 
 const RoutesFunction = () => {
+    const Private = ({ children }) => {
+        const { authenticated, loading } = useContext(AuthContext);
 
+        if (loading) {
+            return <div>Carregando...</div>;
+        }
 
-  const Private= ({children}) => {
-    const {authenticated, loading} = useContext(AuthContext);
+        return authenticated ? children : <Navigate to="/" />;
+    };
 
-    if (loading) {
-      return <div>Carregando...</div>
-    }
+    return (
+        <AuthProvider>
+            <Routes>
+                <Route path="/" element={<SignInPage />} />
 
-    return authenticated ? children : <Navigate to="/"/>
-  }
+                <Route
+                    path="/dashboard"
+                    element={
+                        <Private>
+                            <Dashboard />
+                        </Private>
+                    }
+                />
 
-  return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/" 
-        element={
-          <SignInPage />
-        }/>
+                <Route
+                    path="/questions"
+                    element={
+                        <Private>
+                            <Questions />
+                        </Private>
+                    }
+                />
 
-        <Route path="/dashboard" 
-          element={
-            <Private>
-              <Dashboard /> 
-            </Private>
-          } />  
-          
-        <Route path="/questions" 
-          element={
-            <Private>
-              <Questions />
-            </Private>
-            } />
-      </Routes>
-    </AuthProvider>
-  );
-}
+                <Route
+                    path="/register"
+                    element={
+                        <Private>
+                            <RegisterPage />
+                        </Private>
+                    }
+                />
+            </Routes>
+        </AuthProvider>
+    );
+};
 
 export default RoutesFunction;

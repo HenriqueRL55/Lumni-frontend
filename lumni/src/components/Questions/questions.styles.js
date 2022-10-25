@@ -30,3 +30,13 @@ export const Title = styled.div`
         text-align: center;
     }
 `;
+
+export const Row1Modal = styled.div`
+    display: grid;
+    grid-area: Title;
+`;
+
+export const Row2Modal = styled.div`
+    display: grid;
+    grid-area: Filters;
+`;
