@@ -1,22 +1,66 @@
 import styled from "styled-components/macro";
 
-export const Container = styled.div`
-    margin: 10% auto;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(209, 213, 219, 0);
-    box-shadow: 4px 2px 50px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
+export const AllPage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #03a9f4;
+    transition: 0.5s;
+`;
+
+export const BlueBackground = styled.div`
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    top: 40px;
+    width: 100%;
+    height: 420px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 45px rgba(0, 0, 0, 0.15);
+`;
+
+export const BoxSignIn = styled.div`
+    position: relative;
+    width: 50%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+`;
 
-    @media screen and (max-width: 700px) {
-        margin: 100px auto;
-    }
+export const BoxSignUp = styled.div`
+    position: relative;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
+export const FormBox = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 45px rgba(0, 0, 0, 0.25);
+    transition: 0.5s ease-in-out;
+`;
+
+export const Container = styled.div`
+    position: relative;
+    width: 800px;
+    height: 500px;
+    margin: 20px;
 `;
 
 export const FieldsContainer = styled.div`
