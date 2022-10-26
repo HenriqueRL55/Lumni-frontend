@@ -40,10 +40,22 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const classes = useStyles();
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        //console.log(email, password);
-        login(email, password);
+    const handleSubmit = async (event)  => {
+        try {
+            console.log("teste")
+            console.log(name, email, password);
+            event.preventDefault();
+            const data = await api.post("/users", {
+                email: email,
+                password: password,
+                name: name,
+                type: 3,
+            });
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+
     };
 
     return (
@@ -51,9 +63,8 @@ export default function Register() {
             {" "}
             <Container>
                 {" "}
-                <MainTitle> Lumni </MainTitle>{" "}
+                <MainTitle> Lumni</MainTitle>{" "}
                 <FieldsContainer>
-                    {" aaa " + authenticated}
                     <TextField
                         id="email-input-login"
                         name="nome"
@@ -64,7 +75,7 @@ export default function Register() {
                         // onChange={handleChange}
                         className={classes.field}
                         value={name}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setName(e.target.value)}
                     />
                     <TextField
                         id="email-input-login"

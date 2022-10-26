@@ -24,6 +24,7 @@ const RoutesFunction = () => {
         <AuthProvider>
             <Routes>
                 <Route path="/" element={<SignInPage />} />
+                <Route path="/register" element={<RegisterPage />} />
 
                 <Route
                     path="/dashboard"
@@ -39,15 +40,6 @@ const RoutesFunction = () => {
                     element={
                         <Private>
                             <Questions />
-                        </Private>
-                    }
-                />
-
-                <Route
-                    path="/register"
-                    element={
-                        <Private>
-                            <RegisterPage />
                         </Private>
                     }
                 />

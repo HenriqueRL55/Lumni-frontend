@@ -48,8 +48,8 @@ import FormLabel from "@mui/material/FormLabel";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 
-// API
-//import { findAllQuestions } from "../../api/ApiQuestions";
+import api from "../../services/api";
+import { Description } from "@mui/icons-material";
 
 //Context
 //import { AuthProvider } from "../../contexts/AuthContext";
@@ -188,7 +188,7 @@ function createData(name, calories, fat) {
   return { name, calories, fat };
 }
 
-const rows = [
+/*const rows = [
   createData("Cupcake", 305, 3.7),
   createData("Donut", 452, 25.0),
   createData("Eclair", 262, 16.0),
@@ -202,7 +202,7 @@ const rows = [
   createData("Marshmallow", 318, 0),
   createData("Nougat", 360, 19.0),
   createData("Oreo", 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+].sort((a, b) => (a.calories < b.calories ? -1 : 1));*/
 
 const options = [
   "Nível 1",
@@ -225,33 +225,68 @@ export default function QuestionsData() {
   const [openEdit, setOpenEdit] = useState(false);
   const [questionTitle, setQuestionTitle] = useState("");
   const classes = useStyles();
-  const [questions, setQuestions] = useState([]);
+  const [rows, setRows] = useState([]);
   const [openRemove, setOpenRemove] = useState(false);
 
-  // useEffect(() => {
-  //     const callApiFindAllQuestions = async () => {
-  //         const response = await findAllQuestions(
-  //             auth,
-  //             auth.data.user.stateId,
-  //         );
+  useEffect(() => {
+    const problems = [
+      {
+        id: 1,
+        description: "O que é um algoritmo?",
+        options: [
+          {
+            "description": "alternativa A",
+            "correct": 0
+          },
+          {
+            "description": "alternativa B",
+            "correct": 0
+          },
+          {
+            "description": "alternativa C",
+            "correct": 0
+          },
+          {
+            "description": "alternativa D",
+            "correct": 1
+          }
+        ],
+        level: "Nível 1",
+        tips: "Dica 1",
+      }
+    ];
+    setRows(problems)
+    console.log(problems)
+  }, []);
 
-  //         const { message, payload } = response.data;
+  async function handleEditQuestion() {
+    console.log("Editando questão");
+    /*api.put(`/questions/${questionId}`, {
+      title: questionTitle,
+      level: questionLevel,
 
-  //         if (response.status !== 200) throw Error(message);
+    });*/
+  }
 
-  //         const data = [];
-  //         Object.entries(payload[0].question).map((curr) =>
-  //             data.push({ name: curr[0], value: curr[1] }),
-  //         );
-  //         setQuestions(data);
-  //     };
+  async function handleRemoveQuestion() {
+    console.log("Removendo questão");
+  }
 
-  //     try {
-  //         callApiFindAllQuestions();
-  //     } catch (err) {
-  //         console.log(err);
-  //     }
-  // }, [auth]);
+
+  /* pega as questoes do back e atribui no rows. 
+  useEffect(() => {
+    const callApiFindAllQuestions = async () => {
+      const response = await api.get("/findAllProblems");
+      setRows(response.data);
+    };
+
+    try {
+      callApiFindAllQuestions();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+  */
 
   const handleOpen = () => {
     setOpen(true);
@@ -269,7 +304,7 @@ export default function QuestionsData() {
     setOpenEdit(false);
   };
 
-  const handleOpenRemove = () => {
+  async function handleOpenRemove () {
     setOpenRemove(true);
   };
 
@@ -489,7 +524,7 @@ export default function QuestionsData() {
           variant="contained"
           color={"secondary"}
           className={classes.buttonModal}
-          //onClick={handleEditQuestion}
+          onClick={handleEditQuestion}
         >
           Editar
         </Button>
@@ -510,7 +545,7 @@ export default function QuestionsData() {
             color="primary"
             type="button"
             className={classes.buttonModalRemove}
-            //onClick={handleRemoveQuestion}
+            onClick={handleRemoveQuestion}
           >
             <span className={classes.titleButton}>Remover</span>
           </Button>
@@ -553,9 +588,12 @@ export default function QuestionsData() {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row.id}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.description}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.level}
               </TableCell>
 
               <TableCell style={{ width: 160 }} align="right">
@@ -608,7 +646,7 @@ export default function QuestionsData() {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        {editBody}
+        {editBody} 
       </Modal>
       <Modal
         open={openRemove}
