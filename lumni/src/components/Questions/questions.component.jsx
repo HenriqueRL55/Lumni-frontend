@@ -17,7 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 import { lightGreen, red } from "@mui/material/colors";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
@@ -228,7 +228,7 @@ export default function QuestionsData() {
   const [rows, setRows] = useState([]);
   const [openRemove, setOpenRemove] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {/*
     const problems = [
       {
         id: 1,
@@ -254,9 +254,14 @@ export default function QuestionsData() {
         level: "Nível 1",
         tips: "Dica 1",
       }
-    ];
-    setRows(problems)
-    console.log(problems)
+    ];*/
+    async function getProblems() {
+      const response = await api.get("/findAllProblems");
+      const problems = response.data.problems;
+      console.log(problems)
+      setRows(problems);
+    }
+    getProblems();
   }, []);
 
   async function handleEditQuestion() {
@@ -593,7 +598,7 @@ export default function QuestionsData() {
                 {row.description}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.level}
+                Nível {row.level}
               </TableCell>
 
               <TableCell style={{ width: 160 }} align="right">
