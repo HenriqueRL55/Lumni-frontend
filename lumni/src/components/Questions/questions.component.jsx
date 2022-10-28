@@ -223,38 +223,20 @@ export default function QuestionsData() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
   const classes = useStyles();
   const [rows, setRows] = useState([]);
   const [openRemove, setOpenRemove] = useState(false);
 
-  useEffect(() => {/*
-    const problems = [
-      {
-        id: 1,
-        description: "O que é um algoritmo?",
-        options: [
-          {
-            "description": "alternativa A",
-            "correct": 0
-          },
-          {
-            "description": "alternativa B",
-            "correct": 0
-          },
-          {
-            "description": "alternativa C",
-            "correct": 0
-          },
-          {
-            "description": "alternativa D",
-            "correct": 1
-          }
-        ],
-        level: "Nível 1",
-        tips: "Dica 1",
-      }
-    ];*/
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionA, setQuestionA] = useState("");
+  const [questionB, setQuestionB] = useState("");
+  const [questionC, setQuestionC] = useState("");
+  const [questionD, setQuestionD] = useState("");
+  const [questionE, setQuestionE] = useState("");
+  const [questionCorrect, setQuestionCorrect] = useState("");
+  const [questionLevel, setQuestionLevel] = useState("aa");
+
+  useEffect(() => {
     async function getProblems() {
       const response = await api.get("/findAllProblems");
       const problems = response.data.problems;
@@ -277,6 +259,50 @@ export default function QuestionsData() {
     console.log("Removendo questão");
   }
 
+  async function handleNewQuestion() {
+    console.log(questionTitle,questionA, questionB, questionC, questionD, questionE,questionCorrect);
+    console.log(questionLevel)
+    try{
+      const teste = await api.post("/problems", {
+        problems: [
+          {
+            description: questionTitle,
+            options: [
+              {
+                description: questionA,
+                correct: questionCorrect === "0" ? 1 : 0,
+              },
+              {
+                description: questionB,
+                correct: questionCorrect === "1" ? 1 : 0,
+              },
+              {
+                description: questionC,
+                correct: questionCorrect === "2" ? 1 : 0,
+              },
+              {
+                description: questionD,
+                correct: questionCorrect === "3" ? 1 : 0,
+              },
+              {
+                description: questionE,
+                correct: questionCorrect === "4" ? 1 : 0,
+              }
+            ],
+            level: questionLevel + 1,
+            tips:"teste"
+          }
+        ]
+      });
+      console.log(teste);
+      //window.location.reload();//what window.location.reload() does is reload the page from the server, so it will get the updated data from the database 
+      console.log("Questão cadastrada com sucesso");
+
+    }catch(err){
+      console.log(err);
+    }
+
+  }
 
   /* pega as questoes do back e atribui no rows. 
   useEffect(() => {
@@ -378,11 +404,18 @@ export default function QuestionsData() {
               options={options}
               id="disable-close-on-select"
               disableCloseOnSelect
+              onChange={(event, newValue) => {
+                console.log(options.indexOf(newValue))
+                setQuestionLevel(options.indexOf(newValue))
+                
+
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Nível da Questão"
                   variant="standard"
+
                 />
               )}
             />
@@ -399,11 +432,12 @@ export default function QuestionsData() {
             <RadioGroup
               aria-labelledby="demo-controlled-radio-buttons-group"
               name="controlled-radio-buttons-group"
-              //value={value}
-              //onChange={handleChange}
+              value={questionCorrect}
+              onChange={(event) => setQuestionCorrect(event.target.value)}
+
             >
               <FormControlLabel
-                value="questionA"
+                value="0"
                 control={<Radio />}
                 label="a)"
               />
@@ -416,11 +450,11 @@ export default function QuestionsData() {
                 style={{ margin: 8 }}
                 margin="normal"
                 type="text"
-                //value={questionA}
-                //onChange={(event) => setQuestionA(event.target.value)}
+                value={questionA}
+                onChange={(event) => setQuestionA(event.target.value)}
               />
               <FormControlLabel
-                value="questionB"
+                value="1"
                 control={<Radio />}
                 label="b)"
               />
@@ -433,11 +467,11 @@ export default function QuestionsData() {
                 style={{ margin: 8 }}
                 margin="normal"
                 type="text"
-                //value={questionB}
-                //onChange={(event) => setQuestionA(event.target.value)}
+                value={questionB}
+                onChange={(event) => setQuestionB(event.target.value)}
               />
               <FormControlLabel
-                value="questionC"
+                value="2"
                 control={<Radio />}
                 label="c)"
               />
@@ -450,11 +484,11 @@ export default function QuestionsData() {
                 style={{ margin: 8 }}
                 margin="normal"
                 type="text"
-                //value={questionC}
-                //onChange={(event) => setQuestionA(event.target.value)}
+                value={questionC}
+                onChange={(event) => setQuestionC(event.target.value)}
               />
               <FormControlLabel
-                value="questionD"
+                value="3"
                 control={<Radio />}
                 label="d)"
               />
@@ -467,11 +501,11 @@ export default function QuestionsData() {
                 style={{ margin: 8 }}
                 margin="normal"
                 type="text"
-                //value={questionD}
-                //onChange={(event) => setQuestionA(event.target.value)}
+                value={questionD}
+                onChange={(event) => setQuestionD(event.target.value)}
               />
               <FormControlLabel
-                value="questionE"
+                value="4"
                 control={<Radio />}
                 label="e)"
               />
@@ -484,8 +518,8 @@ export default function QuestionsData() {
                 style={{ margin: 8 }}
                 margin="normal"
                 type="text"
-                //value={questionE}
-                //onChange={(event) => setQuestionA(event.target.value)}
+                value={questionE}
+                onChange={(event) => setQuestionE(event.target.value)}
               />
             </RadioGroup>
           </FormControl>
@@ -496,7 +530,8 @@ export default function QuestionsData() {
               variant="contained"
               color={"secondary"}
               className={classes.buttonModal}
-              //onClick={handleNewQuestion}
+              onClick={handleNewQuestion}
+
             >
               Adicionar
               {<AddIcon />}
