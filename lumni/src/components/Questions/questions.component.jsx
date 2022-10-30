@@ -227,6 +227,8 @@ export default function QuestionsData() {
   const [rows, setRows] = useState([]);
   const [openRemove, setOpenRemove] = useState(false);
 
+  const [RemoveId, setRemoveId] = useState()
+
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionA, setQuestionA] = useState("");
   const [questionB, setQuestionB] = useState("");
@@ -248,15 +250,19 @@ export default function QuestionsData() {
 
   async function handleEditQuestion() {
     console.log("Editando questão");
-    /*api.put(`/questions/${questionId}`, {
-      title: questionTitle,
-      level: questionLevel,
-
-    });*/
+    
   }
 
   async function handleRemoveQuestion() {
-    console.log("Removendo questão");
+    try{
+      console.log("Removendo questão");
+      const teste = await api.delete(`/problems/${RemoveId}`)
+      setOpenRemove(false)
+      console.log(teste)
+
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   async function handleNewQuestion() {
@@ -335,7 +341,8 @@ export default function QuestionsData() {
     setOpenEdit(false);
   };
 
-  async function handleOpenRemove () {
+  function handleOpenRemove (QuestionId) {
+    setRemoveId(QuestionId);
     setOpenRemove(true);
   };
 
@@ -640,7 +647,7 @@ export default function QuestionsData() {
                 <EditIcon onClick={() => handleOpenEdit()} />
               </TableCell>
               <TableCell style={{ width: 160 }} align="center">
-                <DeleteIcon onClick={() => handleOpenRemove()} />
+                <DeleteIcon onClick={() => handleOpenRemove(row.id)} />
               </TableCell>
             </TableRow>
           ))}
