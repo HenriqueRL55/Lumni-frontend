@@ -17,6 +17,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/auth";
 
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     field: {
@@ -40,9 +41,12 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const classes = useStyles();
 
-    const handleSubmit = async (event)  => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
+        navigate("/");
         try {
-            console.log("teste")
+            console.log("teste");
             console.log(name, email, password);
             event.preventDefault();
             const data = await api.post("/users", {
@@ -55,7 +59,6 @@ export default function Register() {
         } catch (error) {
             console.log(error);
         }
-
     };
 
     return (
@@ -104,6 +107,7 @@ export default function Register() {
                             onChange={(e) => setPassword(e.target.value)}
                         ></TextField>
                     </PasswordContainer>
+
                     <Button className={classes.login} onClick={handleSubmit}>
                         Cadastrar
                     </Button>
