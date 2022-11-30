@@ -1,4 +1,6 @@
 import * as React from "react";
+/* Material UI */
+import makeStyles from "@mui/styles/makeStyles";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import AppBar from "@mui/material/AppBar";
@@ -21,9 +23,25 @@ import { AuthContext } from "../../context/auth";
 const pages = ["Perguntas", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
+const useStyles = makeStyles((theme) => ({
+    menuList: {
+        display: "flex",
+        padding: "20px 10px",
+    },
+    letterMenu: {
+        fontSize: "24px",
+        fontWeight: 600,
+        padding: "20px 10px",
+        color: "#fafafa",
+        textDecoration: "none",
+        fontFamily: "Roboto",
+    },
+}));
+
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const classes = useStyles();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -140,10 +158,21 @@ const ResponsiveAppBar = () => {
                             display: { xs: "none", md: "flex" },
                         }}
                     >
-                        <List>
-                            {" "}
-                            <NavLink to="/Questions">
+                        <List className={classes.menuList}>
+                            <NavLink
+                                className={classes.letterMenu}
+                                to="/Dashboard"
+                            >
+                                <ListItemButton>Dashboard</ListItemButton>
+                            </NavLink>
+                            <NavLink
+                                className={classes.letterMenu}
+                                to="/Questions"
+                            >
                                 <ListItemButton>Perguntas</ListItemButton>
+                            </NavLink>
+                            <NavLink className={classes.letterMenu} to="/Quiz">
+                                <ListItemButton>Quiz</ListItemButton>
                             </NavLink>
                         </List>
                     </Box>

@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { SignInPage } from "../pages/sign-in/sign-in.component";
 import { Dashboard } from "../pages/dashboard/dashboard.component";
 import { Questions } from "../pages/questions/questions.component";
+import { Quiz } from "../pages/quiz/quiz.component";
 import { Users } from "../pages/users/users.component";
 import { AuthProvider, AuthContext } from "../context/auth";
 import { RegisterPage } from "../pages/register/register.component";
@@ -49,6 +50,15 @@ const RoutesFunction = () => {
                     element={
                         <Private>
                             <Users />
+                        </Private>
+                    }
+                />
+
+                <Route
+                    path="/quiz"
+                    element={
+                        <Private>
+                            <Quiz />
                         </Private>
                     }
                 />
