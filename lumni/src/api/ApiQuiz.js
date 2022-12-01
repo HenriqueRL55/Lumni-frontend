@@ -17,4 +17,14 @@ export const Perguntas = [
             { resposta: "Maio", correta: true, alternativa: "D)" },
         ],
     },
+    {
+        pergunta: "Qual dia estamos?",
+        opcoesResposta: [
+            { resposta: "Segunda", correta: false, alternativa: "A)" },
+            { resposta: "Terça", correta: false, alternativa: "B)" },
+            { resposta: "Quarta", correta: false, alternativa: "C)" },
+            { resposta: "Quinta", correta: true, alternativa: "D)" },
+            
+        ],
+    },
 ];

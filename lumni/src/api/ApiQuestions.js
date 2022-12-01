@@ -1,12 +1,15 @@
-import { apiUrl } from "./Api";
-import Axios from "axios";
+import api from "../services/api";
 
 //retorna todas as perguntas
 export async function findAllQuestions(auth, stateId) {
     try {
-        return await Axios.get(``, {
-            headers: { Authorization: `Bearer ${auth.data.token}` },
+        const response = await api.get(`/questions/${stateId}`, {
+            headers: {
+                Authorization: auth,
+            },
         });
+        return response.data;
+                
     } catch (err) {
         return err;
     }

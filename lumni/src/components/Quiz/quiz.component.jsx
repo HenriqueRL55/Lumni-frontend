@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({}));
 
 export default function QuizData() {
     const questions = Perguntas ?? [];
+    const [ArmazenaRespondida, setArmazenaRespondida] = useState([]);
+    const [indexRespondida, setIndexRespondida] = useState(0);
     const [perguntaAtual, setPerguntaAtual] = useState(0);
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
@@ -37,6 +39,11 @@ export default function QuizData() {
         }
     }
 
+    function addElement(opcoesResposta) {
+        setIndexRespondida(indexRespondida + 1);
+        setArmazenaRespondida([...ArmazenaRespondida, opcoesResposta]);
+    }
+
     return (
         <Container>
             {showPontuacao ? (
@@ -44,6 +51,7 @@ export default function QuizData() {
                     <span>
                         Sua pontuação é {pontos} de {questions.length}
                     </span>
+                    {console.log(ArmazenaRespondida,questions)}
                 </Pontuação>
             ) : (
                 <>
@@ -51,6 +59,7 @@ export default function QuizData() {
                         <ContagemPerguntas>
                             <span>
                                 Pergunta {perguntaAtual + 1}/{questions.length}
+                                
                             </span>
                         </ContagemPerguntas>
                         <Pergunta>{questions[perguntaAtual].pergunta}</Pergunta>
@@ -61,10 +70,11 @@ export default function QuizData() {
                                 <GrupoResposta>
                                     <span>{opcoesResposta.alternativa}</span>
                                     <ButtonAnswer
-                                        onClick={() =>
-                                            proximaPergunta(
-                                                opcoesResposta.correta,
-                                            )
+                                        onClick={() => 
+                                            {
+                                                proximaPergunta(opcoesResposta.correta);
+                                                addElement(opcoesResposta);
+                                            }
                                         }
                                     >
                                         {opcoesResposta.resposta}
@@ -72,6 +82,7 @@ export default function QuizData() {
                                 </GrupoResposta>
                             ),
                         )}
+                        
                     </Resposta>
                 </>
             )}
