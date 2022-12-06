@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Perguntas } from "../../api/ApiQuiz";
+import React, { useEffect, useState, useLayoutEffect } from "react";
+import api from "../../services/api";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
 /* Styles */
@@ -17,14 +17,46 @@ import { ClassNames } from "@emotion/react";
 
 const useStyles = makeStyles((theme) => ({}));
 
-export default function QuizData() {
-    const questions = Perguntas ?? [];
+
+function QuizData() {
+    
+    const [questions,setquestions] = useState([]);
     const [ArmazenaRespondida, setArmazenaRespondida] = useState([]);
     const [indexRespondida, setIndexRespondida] = useState(0);
     const [perguntaAtual, setPerguntaAtual] = useState(0);
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
     const classes = useStyles();
+    
+    useEffect(() => {
+        async function findperguntas() {
+            console.log("entrou")
+            try {
+                console.log("entrou2")
+                const response = await api.get(`/randomProblem/${1}`);
+                console.log("entrou3")
+                const teste = [
+                    {
+                        pergunta: response.data.problems[0].description,
+                        opcoesResposta: [
+                            {resposta: response.data.options[0].description, correta: response.data.options[0].correct, alternativa: "A)"},
+                            {resposta: response.data.options[1].description, correta: response.data.options[1].correct, alternativa: "B)"},
+                            {resposta: response.data.options[2].description, correta: response.data.options[2].correct, alternativa: "C)"},
+                            {resposta: response.data.options[3].description, correta: response.data.options[3].correct, alternativa: "D)"},
+                        ]
+                    },
+                ];
+                console.log(teste);
+                setquestions(teste);
+                
+            } catch (err) {
+                //console.log(err);
+            }
+        };
+        findperguntas();
+    },[]);
+
+
     function proximaPergunta(correta) {
         const nextQuestion = perguntaAtual + 1;
 
@@ -43,8 +75,15 @@ export default function QuizData() {
         setIndexRespondida(indexRespondida + 1);
         setArmazenaRespondida([...ArmazenaRespondida, opcoesResposta]);
     }
+/*
+   return questions[0] ? (
+        console.log(questions),
+        <h1>
+            {questions[0].opcoesResposta[0].resposta}
+        </h1>
+    ): console.log("nada");*/
 
-    return (
+    return questions[0] ? (
         <Container>
             {showPontuacao ? (
                 <Pontuação>
@@ -87,5 +126,10 @@ export default function QuizData() {
                 </>
             )}
         </Container>
-    );
+    ) : (
+        <h1>Carregando...</h1>
+        //load the page 
+    )
 }
+
+export default QuizData;
