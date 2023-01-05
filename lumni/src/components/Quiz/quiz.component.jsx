@@ -30,11 +30,9 @@ function QuizData() {
     
     useEffect(() => {
         async function findperguntas() {
-            console.log("entrou")
             try {
-                console.log("entrou2")
                 const response = await api.get(`/randomProblem/${1}`);
-                console.log("entrou3")
+                /*
                 const teste = [
                     {
                         pergunta: response.data.problems[0].description,
@@ -45,12 +43,27 @@ function QuizData() {
                             {resposta: response.data.options[3].description, correta: response.data.options[3].correct, alternativa: "D)"},
                         ]
                     },
-                ];
-                console.log(teste);
-                setquestions(teste);
+                ];*/
+                
+                //se for mais de uma pergunta ele buga
+                const letras = ["A)", "B)", "C)", "D)", "E)"];
+                const array_obj = [response.data];
+                const newObject = array_obj.map((item, index) => {
+                    return {
+                        pergunta: item.problems.description,
+                        opcoesResposta: item.options.map((item2, index2) => {
+                            return {
+                                resposta: item2.description,
+                                correta: item2.correct,
+                                alternativa: letras[index2],
+                            };
+                        }),
+                    }
+                });
+                setquestions(newObject);
                 
             } catch (err) {
-                //console.log(err);
+                console.log(err);
             }
         };
         findperguntas();
