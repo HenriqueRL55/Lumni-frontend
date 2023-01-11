@@ -27,6 +27,8 @@ function QuizData() {
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
     const classes = useStyles();
+
+
     
     useEffect(() => {
         async function findperguntas() {
@@ -48,6 +50,7 @@ function QuizData() {
                 //se for mais de uma pergunta ele buga
                 const letras = ["A)", "B)", "C)", "D)", "E)"];
                 const array_obj = [response.data];
+                console.log(array_obj)
                 const newObject = array_obj.map((item, index) => {
                     return {
                         pergunta: item.problems.description,

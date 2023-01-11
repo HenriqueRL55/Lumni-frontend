@@ -90,10 +90,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buttonModal: {
-    width: "10rem",
-    background: "#e0645e",
+    width: "12rem",
+    background: "#7a5ee0",
     height: "55px",
-    right: 20,
     textTransform: "inherit",
     float: "center",
     fontFamily: "Roboto",
@@ -101,16 +100,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "4rem",
     marginTop: "1rem",
     fontSize: 15,
-    transform: "translate(-1rem, -12px) scale(0.9)",
     borderRadius: "15px",
     padding: "20px",
     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
   },
   textControl: {
-    width: "80%",
+    width: "100%",
+    margin: "12px",
     "@media (max-width: 680px)": {
-      width: "80%",
-      padding: 10,
+        width: "100%",
+        padding: 10,
     },
   },
 }));
@@ -228,6 +227,7 @@ export default function QuestionsData() {
   const [openRemove, setOpenRemove] = useState(false);
 
   const [RemoveId, setRemoveId] = useState()
+  const [EditId, setEditId] = useState(0)
 
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionA, setQuestionA] = useState("");
@@ -236,7 +236,24 @@ export default function QuestionsData() {
   const [questionD, setQuestionD] = useState("");
   const [questionE, setQuestionE] = useState("");
   const [questionCorrect, setQuestionCorrect] = useState("");
-  const [questionLevel, setQuestionLevel] = useState("aa");
+  const [questionLevel, setQuestionLevel] = useState("");
+
+  const [EDITquestionTitle, setEDITQuestionTitle] = useState("");
+  const [EDITquestionA, setEDITQuestionA] = useState("");
+  const [EDITquestionB, setEDITQuestionB] = useState("");
+  const [EDITquestionC, setEDITQuestionC] = useState("");
+  const [EDITquestionD, setEDITQuestionD] = useState("");
+  const [EDITquestionE, setEDITQuestionE] = useState("");
+  const [EDITquestionCorrect, setEDITQuestionCorrect] = useState("");
+  const [EDITquestionLevel, setEDITQuestionLevel] = useState(0);
+
+  const [EDITquestionAId, setEDITQuestionAId] = useState(0);
+  const [EDITquestionBId, setEDITQuestionBId] = useState(0);
+  const [EDITquestionCId, setEDITQuestionCId] = useState(0);
+  const [EDITquestionDId, setEDITQuestionDId] = useState(0);
+  const [EDITquestionEId, setEDITQuestionEId] = useState(0);
+
+  const [questionsDependent, setQuestionsDependent] = useState(false);
 
   useEffect(() => {
     async function getProblems() {
@@ -246,11 +263,90 @@ export default function QuestionsData() {
       setRows(problems);
     }
     getProblems();
-  }, []);
+  }, [questionsDependent]);
+
+  
+  async function getQuestionToEdit (EditId) {
+
+    try{
+      const {data} = await api.get(`/findProblem/${EditId}`)
+      console.log(data)
+      setEDITQuestionTitle(data.problem.description)
+      setEDITQuestionLevel(data.problem.level - 1)
+      console.log(EDITquestionLevel)
+      setEDITQuestionA(data.options[0].description)
+      setEDITQuestionB(data.options[1].description)
+      setEDITQuestionC(data.options[2].description)
+      setEDITQuestionD(data.options[3].description)
+      setEDITQuestionE(data.options[4].description)
+
+      setEDITQuestionAId(data.options[0].id)
+      setEDITQuestionBId(data.options[1].id)
+      setEDITQuestionCId(data.options[2].id)
+      setEDITQuestionDId(data.options[3].id)
+      setEDITQuestionEId(data.options[4].id)
+      setEDITQuestionCorrect(
+        data.options[0].correct === 1 ? "0" 
+        : data.options[1].correct === 1 ? "1" 
+        : data.options[2].correct === 1 ? "2" 
+        : data.options[3].correct === 1 ? "3" 
+        : data.options[4].correct === 1 ? "4" : "")
+      
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   async function handleEditQuestion() {
-    console.log("Editando questão");
-    
+    try{
+      console.log("Editando questão");
+      console.log(EDITquestionTitle)
+      console.log(EDITquestionA)
+      console.log(EDITquestionB)
+      console.log(EDITquestionC)
+      console.log(EDITquestionD)
+      console.log(EDITquestionE)
+      console.log( "questao correta " + EDITquestionCorrect )
+      console.log(" LEVEL DA QUESTAO" + EDITquestionLevel)
+
+      const teste = await api.put(`/problems/${EditId}`, {
+        description: EDITquestionTitle,
+        options: [
+          {
+            id: EDITquestionAId,
+            description: EDITquestionA,
+            correct: EDITquestionCorrect === "0" ? 1 : 0,
+          },
+          {
+            id: EDITquestionBId,
+            description: EDITquestionB,
+            correct: EDITquestionCorrect === "1" ? 1 : 0,
+          },
+          {
+            id: EDITquestionCId,
+            description: EDITquestionC,
+            correct: EDITquestionCorrect === "2" ? 1 : 0,
+          },
+          {
+            id: EDITquestionDId,
+            description: EDITquestionD,
+            correct: EDITquestionCorrect === "3" ? 1 : 0,
+          },
+          {
+            id: EDITquestionEId,
+            description: EDITquestionE,
+            correct: EDITquestionCorrect === "4" ? 1 : 0,
+          },
+        ],
+        level: EDITquestionLevel + 1,
+      })
+      setOpenEdit(false)
+      console.log(teste)
+      questionsDependent ? setQuestionsDependent(false) : setQuestionsDependent(true)
+
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   async function handleRemoveQuestion() {
@@ -259,6 +355,7 @@ export default function QuestionsData() {
       const teste = await api.delete(`/problems/${RemoveId}`)
       setOpenRemove(false)
       console.log(teste)
+      questionsDependent ? setQuestionsDependent(false) : setQuestionsDependent(true)
 
     } catch (err) {
       console.log(err)
@@ -268,6 +365,12 @@ export default function QuestionsData() {
   async function handleNewQuestion() {
     console.log(questionTitle,questionA, questionB, questionC, questionD, questionE,questionCorrect);
     console.log(questionLevel)
+
+    if(questionTitle === "" || questionA === "" || questionB === "" || questionC === "" || questionD === "" || questionE === "" || questionCorrect === "" || questionLevel === ""){
+      alert("Preencha todos os campos")
+      return
+    }
+
     try{
       const teste = await api.post("/problems", {
         problems: [
@@ -300,11 +403,12 @@ export default function QuestionsData() {
           }
         ]
       });
-      console.log(teste);
-      //window.location.reload();//what window.location.reload() does is reload the page from the server, so it will get the updated data from the database 
+      console.log(teste); 
+      setOpen(false)
+      questionsDependent ? setQuestionsDependent(false) : setQuestionsDependent(true)
       console.log("Questão cadastrada com sucesso");
 
-    }catch(err){
+    } catch(err){
       console.log(err);
     }
 
@@ -333,7 +437,9 @@ export default function QuestionsData() {
     setOpen(false);
   };
 
-  const handleOpenEdit = () => {
+  const handleOpenEdit = (QuestionId) => {
+    setEditId(QuestionId);
+    getQuestionToEdit(QuestionId);
     setOpenEdit(true);
   };
 
@@ -382,6 +488,7 @@ export default function QuestionsData() {
     setPage(0);
   };
 
+
   const body = (
     <div className={classes.paperModal}>
       <h2 id="simple-modal-title" className={classes.titleEdit}>
@@ -414,16 +521,15 @@ export default function QuestionsData() {
               onChange={(event, newValue) => {
                 console.log(options.indexOf(newValue))
                 setQuestionLevel(options.indexOf(newValue))
-                
-
               }}
+              //value={options[questionLevel]} usar no edit
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Nível da Questão"
                   variant="standard"
-
                 />
+                 
               )}
             />
           </Stack>
@@ -433,7 +539,7 @@ export default function QuestionsData() {
             <FormLabel
               className={classes.textControl}
               id="demo-controlled-radio-buttons-group"
-            >
+            >6
               Respostas
             </FormLabel>
             <RadioGroup
@@ -441,12 +547,15 @@ export default function QuestionsData() {
               name="controlled-radio-buttons-group"
               value={questionCorrect}
               onChange={(event) => setQuestionCorrect(event.target.value)}
+              
 
             >
+              {questionCorrect}
               <FormControlLabel
                 value="0"
                 control={<Radio />}
                 label="a)"
+                //checked = {questionCorrect === "0" ? true : false} vai ir no edit question
               />
               <TextField
                 id="questionA"
@@ -464,6 +573,7 @@ export default function QuestionsData() {
                 value="1"
                 control={<Radio />}
                 label="b)"
+
               />
               <TextField
                 id="questionB"
@@ -547,35 +657,172 @@ export default function QuestionsData() {
         </AddIconModal>
       </ContainerAddModalQuestion>
     </div>
+    
   );
 
   const editBody = (
     <div className={classes.paperModal}>
       <h2 id="simple-modal-title" className={classes.titleEdit}>
-        Editar pergunta
+        Editar Pergunta
       </h2>
+      <ContainerAddModalQuestion>
+        <Question>
+          <TextField
+            variant="outlined"
+            multiline={true}
+            size="small"
+            id="new-question"
+            className={classes.textControl}
+            label="Pergunta"
+            style={{ margin: 8 }}
+            placeholder="Informe aqui"
+            margin="normal"
+            type="text"
+            value={EDITquestionTitle}
+            onChange={(event) => setEDITQuestionTitle(event.target.value)}
+          />
+        </Question>
+        <Level>
+          <Stack spacing={1} sx={{ width: 300 }}>
+            <Autocomplete
+              //{...defaultProps}
+              options={options}
+              id="disable-close-on-select"
+              disableCloseOnSelect
+              onChange={(event, newValue) => {
+                console.log(options.indexOf(newValue))
+                setEDITQuestionLevel(options.indexOf(newValue))
+              }}
+              value={options[EDITquestionLevel]}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Nível da Questão"
+                  variant="standard"
+                />
+                 
+              )}
+            />
+          </Stack>
+        </Level>
+        <Answers>
+          <FormControl>
+            <FormLabel
+              className={classes.textControl}
+              id="demo-controlled-radio-buttons-group"
+            >6
+              Respostas
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-controlled-radio-buttons-group"
+              name="controlled-radio-buttons-group"
+              value={EDITquestionCorrect}
+              onChange={(event) => setEDITQuestionCorrect(event.target.value)}
+            >
+              <FormControlLabel
+                value="0"
+                control={<Radio />}
+                label="a)"
+                
+              />
+              <TextField
+                id="questionA"
+                variant="outlined"
+                multiline={true}
+                size="small"
+                className={classes.textControl}
+                style={{ margin: 8 }}
+                margin="normal"
+                type="text"
+                value={EDITquestionA}
+                onChange={(event) => setEDITQuestionA(event.target.value)}
+              />
+              <FormControlLabel
+                value="1"
+                control={<Radio />}
+                label="b)"
 
-      <TextField
-        id="new-question"
-        className={classes.textControl}
-        label="Pergunta"
-        style={{ margin: 8 }}
-        placeholder="Informe aqui"
-        margin="normal"
-        type="text"
-        value={questionTitle}
-        onChange={(event) => setQuestionTitle(event.target.value)}
-      />
-      <ThemeProvider theme={theme}>
-        <Button
-          variant="contained"
-          color={"secondary"}
-          className={classes.buttonModal}
-          onClick={handleEditQuestion}
-        >
-          Editar
-        </Button>
-      </ThemeProvider>
+              />
+              <TextField
+                id="questionB"
+                variant="outlined"
+                multiline={true}
+                size="small"
+                className={classes.textControl}
+                style={{ margin: 8 }}
+                margin="normal"
+                type="text"
+                value={EDITquestionB}
+                onChange={(event) => setEDITQuestionB(event.target.value)}
+              />
+              <FormControlLabel
+                value="2"
+                control={<Radio />}
+                label="c)"
+              />
+              <TextField
+                id="questionC"
+                variant="outlined"
+                multiline={true}
+                size="small"
+                className={classes.textControl}
+                style={{ margin: 8 }}
+                margin="normal"
+                type="text"
+                value={EDITquestionC}
+                onChange={(event) => setEDITQuestionC(event.target.value)}
+              />
+              <FormControlLabel
+                value="3"
+                control={<Radio />}
+                label="d)"
+              />
+              <TextField
+                id="questionD"
+                variant="outlined"
+                multiline={true}
+                size="small"
+                className={classes.textControl}
+                style={{ margin: 8 }}
+                margin="normal"
+                type="text"
+                value={EDITquestionD}
+                onChange={(event) => setEDITQuestionD(event.target.value)}
+              />
+              <FormControlLabel
+                value="4"
+                control={<Radio />}
+                label="e)"
+              />
+              <TextField
+                id="questionE"
+                variant="outlined"
+                multiline={true}
+                size="small"
+                className={classes.textControl}
+                style={{ margin: 8 }}
+                margin="normal"
+                type="text"
+                value={EDITquestionE}
+                onChange={(event) => setEDITQuestionE(event.target.value)}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Answers>
+        <AddIconModal>
+          <ThemeProvider theme={theme}>
+            <Button
+              variant="contained"
+              color={"secondary"}
+              className={classes.buttonModal}
+              onClick={handleEditQuestion}
+            >
+              Editar
+              {<AddIcon />}
+            </Button>
+          </ThemeProvider>
+        </AddIconModal>
+      </ContainerAddModalQuestion>
     </div>
   );
 
@@ -644,7 +891,7 @@ export default function QuestionsData() {
               </TableCell>
 
               <TableCell style={{ width: 160 }} align="right">
-                <EditIcon onClick={() => handleOpenEdit()} />
+                <EditIcon onClick={() => handleOpenEdit(row.id)} />
               </TableCell>
               <TableCell style={{ width: 160 }} align="center">
                 <DeleteIcon onClick={() => handleOpenRemove(row.id)} />
