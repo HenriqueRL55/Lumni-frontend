@@ -166,7 +166,13 @@ const ResponsiveAppBar = () => {
                             >
                                 <ListItemButton>Perguntas</ListItemButton>
                             </NavLink>
-                            <NavLink className={classes.letterMenu} to="/Quiz">
+                            {/* <NavLink className={classes.letterMenu} to="/Quiz">
+                                <ListItemButton>Quiz</ListItemButton>
+                            </NavLink> */}
+                            <NavLink
+                                className={classes.letterMenu}
+                                to="/Filter"
+                            >
                                 <ListItemButton>Quiz</ListItemButton>
                             </NavLink>
                         </List>

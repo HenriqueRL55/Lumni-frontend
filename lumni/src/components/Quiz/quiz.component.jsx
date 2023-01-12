@@ -17,10 +17,8 @@ import { ClassNames } from "@emotion/react";
 
 const useStyles = makeStyles((theme) => ({}));
 
-
 function QuizData() {
-    
-    const [questions,setquestions] = useState([]);
+    const [questions, setquestions] = useState([]);
     const [ArmazenaRespondida, setArmazenaRespondida] = useState([]);
     const [indexRespondida, setIndexRespondida] = useState(0);
     const [perguntaAtual, setPerguntaAtual] = useState(0);
@@ -28,8 +26,6 @@ function QuizData() {
     const [pontos, setPontos] = useState(0);
     const classes = useStyles();
 
-
-    
     useEffect(() => {
         async function findperguntas() {
             try {
@@ -46,11 +42,11 @@ function QuizData() {
                         ]
                     },
                 ];*/
-                
+
                 //se for mais de uma pergunta ele buga
                 const letras = ["A)", "B)", "C)", "D)", "E)"];
                 const array_obj = [response.data];
-                console.log(array_obj)
+                console.log(array_obj);
                 const newObject = array_obj.map((item, index) => {
                     return {
                         pergunta: item.problems.description,
@@ -61,17 +57,15 @@ function QuizData() {
                                 alternativa: letras[index2],
                             };
                         }),
-                    }
+                    };
                 });
                 setquestions(newObject);
-                
             } catch (err) {
                 console.log(err);
             }
-        };
+        }
         findperguntas();
-    },[]);
-
+    }, []);
 
     function proximaPergunta(correta) {
         const nextQuestion = perguntaAtual + 1;
@@ -91,7 +85,7 @@ function QuizData() {
         setIndexRespondida(indexRespondida + 1);
         setArmazenaRespondida([...ArmazenaRespondida, opcoesResposta]);
     }
-/*
+    /*
    return questions[0] ? (
         console.log(questions),
         <h1>
@@ -106,7 +100,7 @@ function QuizData() {
                     <span>
                         Sua pontuação é {pontos} de {questions.length}
                     </span>
-                    {console.log(ArmazenaRespondida,questions)}
+                    {console.log(ArmazenaRespondida, questions)}
                 </Pontuação>
             ) : (
                 <>
@@ -114,7 +108,6 @@ function QuizData() {
                         <ContagemPerguntas>
                             <span>
                                 Pergunta {perguntaAtual + 1}/{questions.length}
-                                
                             </span>
                         </ContagemPerguntas>
                         <Pergunta>{questions[perguntaAtual].pergunta}</Pergunta>
@@ -125,27 +118,26 @@ function QuizData() {
                                 <GrupoResposta>
                                     <span>{opcoesResposta.alternativa}</span>
                                     <ButtonAnswer
-                                        onClick={() => 
-                                            {
-                                                proximaPergunta(opcoesResposta.correta);
-                                                addElement(opcoesResposta);
-                                            }
-                                        }
+                                        onClick={() => {
+                                            proximaPergunta(
+                                                opcoesResposta.correta,
+                                            );
+                                            addElement(opcoesResposta);
+                                        }}
                                     >
                                         {opcoesResposta.resposta}
                                     </ButtonAnswer>
                                 </GrupoResposta>
                             ),
                         )}
-                        
                     </Resposta>
                 </>
             )}
         </Container>
     ) : (
         <h1>Carregando...</h1>
-        //load the page 
-    )
+        //load the page
+    );
 }
 
 export default QuizData;
