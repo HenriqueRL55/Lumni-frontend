@@ -29,7 +29,7 @@ function QuizData() {
     useEffect(() => {
         async function findperguntas() {
             try {
-                const response = await api.get(`/randomProblem/${1}`);
+                const response = await api.get(`/randomProblem/${2}`);
                 /*
                 const teste = [
                     {
@@ -49,7 +49,9 @@ function QuizData() {
                 console.log(array_obj);
                 const newObject = array_obj.map((item, index) => {
                     return {
-                        pergunta: item.problems.description,
+                        pergunta: item.problems.map((item) => {
+                            return item.description;
+                        }),
                         opcoesResposta: item.options.map((item2, index2) => {
                             return {
                                 resposta: item2.description,
@@ -104,6 +106,7 @@ function QuizData() {
                 </Pontuação>
             ) : (
                 <>
+                    {console.log(perguntaAtual, "teste")}
                     <InfoPerguntas>
                         <ContagemPerguntas>
                             <span>
