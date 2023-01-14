@@ -52,7 +52,9 @@ function QuizData() {
                         pergunta: item.problems.map((item) => {
                             return item.description;
                         }),
-                        opcoesResposta: item.options.map((item2, index2) => {
+                        opcoesResposta: item.options
+                        .filter((item) => item.description != "" && item.description != null && item.description.trim() != "")
+                        .map((item2, index2) => {
                             return {
                                 resposta: item2.description,
                                 correta: item2.correct,
@@ -61,6 +63,7 @@ function QuizData() {
                         }),
                     };
                 });
+                
                 setquestions(newObject);
             } catch (err) {
                 console.log(err);
@@ -106,7 +109,7 @@ function QuizData() {
                 </Pontuação>
             ) : (
                 <>
-                    {console.log(perguntaAtual, "teste")}
+                    
                     <InfoPerguntas>
                         <ContagemPerguntas>
                             <span>

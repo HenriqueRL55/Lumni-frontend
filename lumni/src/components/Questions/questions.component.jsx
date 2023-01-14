@@ -366,7 +366,7 @@ export default function QuestionsData() {
     console.log(questionTitle,questionA, questionB, questionC, questionD, questionE,questionCorrect);
     console.log(questionLevel)
 
-    if(questionTitle === "" || questionA === "" || questionB === "" || questionC === "" || questionD === "" || questionE === "" || questionCorrect === "" || questionLevel === ""){
+    if(questionTitle === "" || questionCorrect === "" || questionLevel === ""){
       alert("Preencha todos os campos")
       return
     }
