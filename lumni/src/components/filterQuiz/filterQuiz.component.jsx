@@ -52,7 +52,7 @@ function FilterQuizData(name, setName, fetchQuestions) {
                         Por favor, selecione todos os campos
                     </ErrorMessage>
                 )}
-
+                {/* 
                 <TextField
                     select
                     label="Selecione a categoria"
@@ -83,7 +83,7 @@ function FilterQuizData(name, setName, fetchQuestions) {
                             variant="standard"
                         />
                     )}
-                />
+                /> */}
                 <Button
                     variant="contained"
                     color="primary"
