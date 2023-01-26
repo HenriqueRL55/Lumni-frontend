@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect} from "react";
 import api from "../../services/api";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
+import Categories from "../../api/Categories";
 /* Styles */
 import {
     Container,
@@ -14,6 +15,7 @@ import {
     ButtonAnswer,
 } from "./quiz.styles";
 import { ClassNames } from "@emotion/react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -24,38 +26,42 @@ function QuizData() {
     const [perguntaAtual, setPerguntaAtual] = useState(0);
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
-    const classes = useStyles();
+    const Value = useLocation().state;
+ 
 
     useEffect(() => {
         async function findperguntas() {
             try {
-                const response = await api.get(`/randomProblem/${2}`);
-                /*
-                const teste = [
-                    {
-                        pergunta: response.data.problems[0].description,
-                        opcoesResposta: [
-                            {resposta: response.data.options[0].description, correta: response.data.options[0].correct, alternativa: "A)"},
-                            {resposta: response.data.options[1].description, correta: response.data.options[1].correct, alternativa: "B)"},
-                            {resposta: response.data.options[2].description, correta: response.data.options[2].correct, alternativa: "C)"},
-                            {resposta: response.data.options[3].description, correta: response.data.options[3].correct, alternativa: "D)"},
-                        ]
-                    },
-                ];*/
 
-                //se for mais de uma pergunta ele buga
+                const id = JSON.parse(localStorage.getItem("user")).id;
+                const category_name = Categories.find((item) => item.value == Value.category);
+                const player = await api.get(`/findUser/${id}`);
+
+                console.log(category_name.category, );
+                var response;
+
+                if(player.data.player.length == 0){
+                    response = await api.get(`/randomProblem/${2}`);
+
+                } else {
+                    response = await api.get(`/randomProblemByTheme/${player.data.player[0].id}/theme/${category_name.value}`);
+                }
+                
+
                 const letras = ["A)", "B)", "C)", "D)", "E)"];
                 const array_obj = [response.data];
                 console.log(array_obj);
                 const newObject = array_obj.map((item, index) => {
                     return {
-                        pergunta: item.problems.map((item) => {
-                            return item.description;
-                        }),
+                        pergunta:{
+                            question: item.problems[index].description,
+                            id: item.problems[index].id,
+                        },
                         opcoesResposta: item.options
                         .filter((item) => item.description != "" && item.description != null && item.description.trim() != "")
                         .map((item2, index2) => {
                             return {
+                                id: item2.id,
                                 resposta: item2.description,
                                 correta: item2.correct,
                                 alternativa: letras[index2],
@@ -64,6 +70,7 @@ function QuizData() {
                     };
                 });
                 
+                console.log(newObject)
                 setquestions(newObject);
             } catch (err) {
                 console.log(err);
@@ -86,9 +93,13 @@ function QuizData() {
         }
     }
 
-    function addElement(opcoesResposta) {
+    function addElement(opcoesResposta, pergunta) {
         setIndexRespondida(indexRespondida + 1);
-        setArmazenaRespondida([...ArmazenaRespondida, opcoesResposta]);
+        const resultado = {
+            pergunta: pergunta,
+            resposta: opcoesResposta,
+        }
+        setArmazenaRespondida([...ArmazenaRespondida, resultado]);
     }
     /*
    return questions[0] ? (
@@ -105,7 +116,7 @@ function QuizData() {
                     <span>
                         Sua pontuação é {pontos} de {questions.length}
                     </span>
-                    {console.log(ArmazenaRespondida, questions)}
+                    {console.log(ArmazenaRespondida)}
                 </Pontuação>
             ) : (
                 <>
@@ -116,20 +127,23 @@ function QuizData() {
                                 Pergunta {perguntaAtual + 1}/{questions.length}
                             </span>
                         </ContagemPerguntas>
-                        <Pergunta>{questions[perguntaAtual].pergunta}</Pergunta>
+                        <Pergunta>
+                            {questions[perguntaAtual].pergunta.question}
+                        </Pergunta>
                     </InfoPerguntas>
                     <Resposta>
                         {questions[perguntaAtual].opcoesResposta.map(
-                            (opcoesResposta) => (
-                                <GrupoResposta>
+                            (opcoesResposta, index) => (
+                                <GrupoResposta key={index}>
                                     <span>{opcoesResposta.alternativa}</span>
-                                    <ButtonAnswer
+                                    <ButtonAnswer 
                                         onClick={() => {
                                             proximaPergunta(
                                                 opcoesResposta.correta,
                                             );
-                                            addElement(opcoesResposta);
+                                            addElement(opcoesResposta, questions[perguntaAtual].pergunta.id);
                                         }}
+                                        
                                     >
                                         {opcoesResposta.resposta}
                                     </ButtonAnswer>
