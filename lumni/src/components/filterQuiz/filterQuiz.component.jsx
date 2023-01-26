@@ -32,15 +32,20 @@ function FilterQuizData(name, setName, fetchQuestions) {
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        navigate("/Quiz");
-        // if (!category || !options) {
-        //     setError(true);
-        //     return;
-        // } else {
-        //     setError(false);
-        //     fetchQuestions(category, options);
-        //     navigate("/Quiz");
-        // }
+        if (!category || !options) {
+            setError(true);
+            return;
+        } else {
+            setError(false);
+            navigate("/Quiz", 
+        { 
+            state: {
+                category: category,
+                questionLevel: questionLevel,
+
+            }
+        });
+        }
     };
 
     return (
@@ -49,7 +54,7 @@ function FilterQuizData(name, setName, fetchQuestions) {
                 <div style={{ fontSize: 30 }}> Quiz</div>
                 {error && (
                     <ErrorMessage>
-                        Por favor, selecione todos os campos
+                        Selecione todos os campos
                     </ErrorMessage>
                 )}
 

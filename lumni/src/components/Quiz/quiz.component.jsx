@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect} from "react";
 import api from "../../services/api";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
+import Categories from "../../api/Categories";
 /* Styles */
 import {
     Container,
@@ -14,6 +15,7 @@ import {
     ButtonAnswer,
 } from "./quiz.styles";
 import { ClassNames } from "@emotion/react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -25,11 +27,34 @@ function QuizData() {
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
     const classes = useStyles();
+    const Value = useLocation().state;
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function findperguntas() {
             try {
-                const response = await api.get(`/randomProblem/${2}`);
+
+                const id = JSON.parse(localStorage.getItem("user")).id;
+                const category_name = Categories.find((item) => item.value == Value.category);
+                console.log(category_name);
+                
+                const player = await api.get(`/findUser/${id}`);
+                var response;
+
+                console.log(player)
+                if(player.data.player.length == 0){
+                    response = await api.get(`/randomProblem/${2}`);
+
+                } else {
+                    response = await api.get(`/randomProblemByTheme/${id}/theme/${category_name.value}`);
+                }
+                
+
+                console.log(id);
+                console.log(category_name);
+                console.log(Value);
+                
+                
                 /*
                 const teste = [
                     {
@@ -43,7 +68,6 @@ function QuizData() {
                     },
                 ];*/
 
-                //se for mais de uma pergunta ele buga
                 const letras = ["A)", "B)", "C)", "D)", "E)"];
                 const array_obj = [response.data];
                 console.log(array_obj);
