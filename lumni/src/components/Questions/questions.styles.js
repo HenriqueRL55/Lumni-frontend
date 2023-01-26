@@ -16,10 +16,17 @@ export const Container = styled.div`
     }
 `;
 
-export const Title = styled.div`
-    grid-area: title;
+export const ContainerTitle = styled.div`
+    display: grid;
+    grid-template-areas: "title question";
     border-bottom: 1px solid #e0e0e0;
-    border-top: 1px solid #e0e0e0;
+    padding: 20px 0;
+`;
+
+export const Title = styled.div`
+    display: grid;
+    grid-area: title;
+
     font-size: 22px;
     text-align: left;
     padding: 10px 10px 10px 18px;
@@ -31,14 +38,26 @@ export const Title = styled.div`
     }
 `;
 
+export const ADDQuestion = styled.div`
+    display: grid;
+    grid-area: question;
+    width: 100%;
+    justify-content: end;
+    transform: translateX(-80px);
+`;
+
 export const Row1Modal = styled.div`
     display: grid;
     grid-area: Title;
+    justify-content: center;
+    margin: 20px;
 `;
 
 export const Row2Modal = styled.div`
     display: grid;
     grid-area: Filters;
+    justify-content: center;
+    margin: 20px;
 `;
 
 export const ContainerAddModalQuestion = styled.div`

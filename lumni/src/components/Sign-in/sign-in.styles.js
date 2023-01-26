@@ -85,4 +85,5 @@ export const MainTitle = styled.h1`
 
 export const PasswordContainer = styled.div`
     display: flex;
+    margin: 12px 0;
 `;

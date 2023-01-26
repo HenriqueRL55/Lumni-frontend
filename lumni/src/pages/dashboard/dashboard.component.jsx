@@ -10,12 +10,10 @@ export function Dashboard() {
     useEffect(() => {
         document.body.style.background = "#fafafa";
     }, []);
-    const { authenticated, login, logout } = useContext(AuthContext);
     return (
         <>
             <Header />
             <DashboardData />
-            <button onClick={() => logout()}>Logout</button>
         </>
     );
 }

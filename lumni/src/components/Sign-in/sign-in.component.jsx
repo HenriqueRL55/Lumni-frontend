@@ -17,8 +17,10 @@ import {
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import makeStyles from "@mui/styles/makeStyles";
-
+import Typography from "@mui/material/Typography";
 import { useState, useContext } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { AuthContext } from "../../context/auth";
 
 import api from "../../services/api";
@@ -27,7 +29,7 @@ import { NavLink } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     field: {
         width: "100%",
-        paddingBottom: 20,
+        paddingBottom: 60,
         flex: 1,
     },
     login: {
@@ -75,12 +77,17 @@ export default function SignIn() {
     const { authenticated, login, logout } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const classes = useStyles();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         //console.log(email, password);
         login(email, password);
+    };
+
+    const togglePassword = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -98,8 +105,14 @@ export default function SignIn() {
                             </h2>
                             <NavLink className={classes.signUp} to="/register">
                                 <Button
-
-                                //onClick={handleSubmitRegister}
+                                    sx={{
+                                        display: { xs: "none", md: "flex" },
+                                        fontWeight: 700,
+                                        justifyContent: "center",
+                                        color: " #03a9f4",
+                                        textDecoration: "none",
+                                    }}
+                                    //onClick={handleSubmitRegister}
                                 >
                                     Cadastrar
                                 </Button>
@@ -109,7 +122,22 @@ export default function SignIn() {
 
                     <FormBox>
                         <FieldsContainer>
-                            {/* {" aaa " + authenticated} */}
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="a"
+                                sx={{
+                                    display: { xs: "none", md: "flex" },
+                                    fontFamily: "monospace",
+                                    fontWeight: 700,
+                                    justifyContent: "center",
+                                    letterSpacing: ".3rem",
+                                    color: " #03a9f4",
+                                    textDecoration: "none",
+                                }}
+                            >
+                                Lumni
+                            </Typography>
                             <TextField
                                 id="email-input-login"
                                 name="email"
@@ -128,7 +156,7 @@ export default function SignIn() {
                                     name="password"
                                     color="secondary"
                                     label="Senha"
-                                    // type={showPassword ? 'text' : 'password'}
+                                    type={showPassword ? "text" : "password"}
                                     autoComplete="current-password"
                                     variant="outlined"
                                     // onChange={handleChange}
@@ -138,6 +166,16 @@ export default function SignIn() {
                                         setPassword(e.target.value)
                                     }
                                 ></TextField>
+                                <Button
+                                    className={classes.showPassword}
+                                    onClick={togglePassword}
+                                >
+                                    {showPassword ? (
+                                        <VisibilityIcon />
+                                    ) : (
+                                        <VisibilityOffIcon />
+                                    )}
+                                </Button>
                             </PasswordContainer>{" "}
                             <Button
                                 className={classes.login}

@@ -24,6 +24,27 @@ const pages = ["Perguntas", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const useStyles = makeStyles((theme) => ({
+    forgotPasswordButton: {
+        display: "grid",
+        border: "0px solid black",
+        margin: "0px auto",
+        marginBottom: 5,
+        cursor: "pointer",
+        width: "65%",
+        textDecoration: "none !important",
+    },
+    button: {
+        fontFamily: "Poppins, sans-serif",
+        textTransform: "none",
+        padding: "12px",
+        marginBottom: 20,
+    },
+    showPassword: {
+        height: 56,
+        marginTop: "0px",
+        border: "1px solid #bdbdbd",
+        borderLeft: "none",
+    },
     menuList: {
         display: "flex",
         padding: "20px 10px",
@@ -68,7 +89,7 @@ const ResponsiveAppBar = () => {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
+                        href="/dashboard"
                         sx={{
                             mr: 2,
                             display: { xs: "none", md: "flex" },
@@ -184,14 +205,17 @@ const ResponsiveAppBar = () => {
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}
                             >
-                                <Avatar
-                                    alt="Remy Sharp"
-                                    src="/static/images/avatar/2.jpg"
-                                />
+                                <Avatar alt="Icone Perfil" />
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: "45px" }}
+                            sx={{
+                                display: { xs: "none", md: "flex" },
+                                fontWeight: 700,
+                                justifyContent: "center",
+                                color: " #03a9f4",
+                                textDecoration: "none",
+                            }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
