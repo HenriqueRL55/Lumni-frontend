@@ -26,6 +26,7 @@ function QuizData() {
     const [perguntaAtual, setPerguntaAtual] = useState(0);
     const [showPontuacao, setShowPontuacao] = useState(false);
     const [pontos, setPontos] = useState(0);
+    const [playerID, setplayerID] = useState(0);
     const Value = useLocation().state;
  
 
@@ -36,6 +37,7 @@ function QuizData() {
                 const id = JSON.parse(localStorage.getItem("user")).id;
                 const category_name = Categories.find((item) => item.value == Value.category);
                 const player = await api.get(`/findUser/${id}`);
+                console.log(player)
 
                 console.log(category_name);
                 var response;
@@ -44,6 +46,7 @@ function QuizData() {
                     response = await api.get(`/randomProblem/${2}`);
 
                 } else {
+                    setplayerID(player.data.player[0].id);
                     response = await api.get(`/randomProblemByTheme/${player.data.player[0].id}/theme/${category_name.value}`);
                 }
 
@@ -97,7 +100,24 @@ function QuizData() {
             pergunta: pergunta,
             resposta: opcoesResposta,
         }
-        setArmazenaRespondida([...ArmazenaRespondida, resultado]);
+
+        ArmazenaRespondida.push(resultado);
+        saveResult();
+    }
+
+    async function saveResult() {
+        
+        try {
+            await api.post("answers" , {
+                option_id: ArmazenaRespondida[0].resposta.id,
+                used_time: 30,
+                player_id: playerID,
+                problem_id: ArmazenaRespondida[0].pergunta,
+            })
+            console.log("enviou resposta")
+        } catch (err) {
+            console.log(err);
+        }
     }
     /*
    return questions[0] ? (
@@ -114,7 +134,6 @@ function QuizData() {
                     <span>
                         Sua pontuação é {pontos} de {questions.length}
                     </span>
-                    {console.log(ArmazenaRespondida)}
                 </Pontuação>
             ) : (
                 <>
