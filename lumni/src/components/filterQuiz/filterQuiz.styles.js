@@ -2,6 +2,7 @@ import styled from "styled-components/macro";
 
 export const Container = styled.div`
     margin: 20px auto;
+    padding: 20px;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -14,4 +15,37 @@ export const Container = styled.div`
     @media screen and (max-width: 700px) {
         margin: 100px auto;
     }
+`;
+
+export const ContainerRow = styled.div`
+    display: grid;
+    grid-template-areas:
+        "text"
+        "filters"
+        "button";
+`;
+
+export const Text = styled.div`
+    display: grid;
+    grid-area: text;
+    font-family: "monospace";
+    justify-content: "center";
+    text-align: center;
+    padding: 20px 40px;
+`;
+
+export const Filters = styled.div`
+    display: grid;
+    grid-area: filters;
+    width: 50%;
+    margin: 12px;
+    margin: auto;
+`;
+
+export const ButtonCont = styled.div`
+    display: grid;
+    grid-area: button;
+    width: 50%;
+
+    margin: 20px auto;
 `;

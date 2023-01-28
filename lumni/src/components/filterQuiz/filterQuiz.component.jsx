@@ -8,8 +8,14 @@ import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 /* Styles */
-import { Container } from "./filterQuiz.styles";
-
+import {
+    Container,
+    Filters,
+    Text,
+    ContainerRow,
+    ButtonCont,
+} from "./filterQuiz.styles";
+import Typography from "@mui/material/Typography";
 const options = [
     "Nível 1",
     "Nível 2",
@@ -37,66 +43,86 @@ function FilterQuizData(name, setName, fetchQuestions) {
             return;
         } else {
             setError(false);
-            navigate("/Quiz", 
-        { 
-            state: {
-                category: category,
-                questionLevel: questionLevel,
-
-            }
-        });
+            navigate("/Quiz", {
+                state: {
+                    category: category,
+                    questionLevel: questionLevel,
+                },
+            });
         }
     };
 
     return (
         <>
             <Container>
-                <div style={{ fontSize: 30 }}> Quiz</div>
                 {error && (
-                    <ErrorMessage>
-                        Selecione todos os campos
-                    </ErrorMessage>
+                    <ErrorMessage>Selecione todos os campos</ErrorMessage>
                 )}
-                
-                <TextField
-                    select
-                    label="Selecione a categoria"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    variant="outlined"
-                    style={{ marginBottom: 30, width: "100%" }}
-                >
-                    {Categories.map((cat) => (
-                        <MenuItem key={cat.category} value={cat.value}>
-                            {cat.category}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <Autocomplete
-                    //{...defaultProps}
-                    options={options}
-                    id="disable-close-on-select"
-                    disableCloseOnSelect
-                    onChange={(event, newValue) => {
-                        setQuestionLevel(options.indexOf(newValue));
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="a"
+                    sx={{
+                        display: { xs: "none", md: "flex" },
+                        fontFamily: "monospace",
+                        fontSize: 36,
+                        fontWeight: 700,
+                        justifyContent: "center",
+                        color: " #03a9f4",
+                        textDecoration: "none",
                     }}
-                    //value={options[questionLevel]} usar no edit
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Nível da Questão"
-                            variant="standard"
-                        />
-                    )}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    onClick={handleSubmit}
                 >
-                    Começar Quiz
-                </Button>
+                    Quiz Lumni
+                </Typography>
+                <ContainerRow>
+                    <Text>
+                        Selecione a categoria e seu nível de conhecimento para
+                        gerar o quiz que deseja realizar!
+                    </Text>
+                    <Filters>
+                        <TextField
+                            select
+                            label="Selecione a categoria"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            variant="outlined"
+                            style={{ marginBottom: 30, width: "100%" }}
+                        >
+                            {Categories.map((cat) => (
+                                <MenuItem key={cat.category} value={cat.value}>
+                                    {cat.category}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <Autocomplete
+                            //{...defaultProps}
+                            options={options}
+                            id="disable-close-on-select"
+                            disableCloseOnSelect
+                            onChange={(event, newValue) => {
+                                setQuestionLevel(options.indexOf(newValue));
+                            }}
+                            //value={options[questionLevel]} usar no edit
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Nível da Questão"
+                                    variant="standard"
+                                />
+                            )}
+                        />
+                    </Filters>
+                    <ButtonCont>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            onClick={handleSubmit}
+                        >
+                            Começar Quiz
+                        </Button>
+                    </ButtonCont>
+                </ContainerRow>
             </Container>{" "}
         </>
     );

@@ -14,6 +14,7 @@ import {
 } from "./questions.styles";
 
 /* Material UI*/
+import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -52,7 +53,7 @@ import Stack from "@mui/material/Stack";
 
 import api from "../../services/api";
 import { Description } from "@mui/icons-material";
-
+import Categories from "../../api/Categories";
 //Context
 //import { AuthProvider } from "../../contexts/AuthContext";
 
@@ -252,7 +253,7 @@ export default function QuestionsData() {
     const classes = useStyles();
     const [rows, setRows] = useState([]);
     const [openRemove, setOpenRemove] = useState(false);
-
+    const [category, setCategory] = useState("");
     const [RemoveId, setRemoveId] = useState();
     const [EditId, setEditId] = useState(0);
 
@@ -273,6 +274,7 @@ export default function QuestionsData() {
     const [EDITquestionE, setEDITQuestionE] = useState("");
     const [EDITquestionCorrect, setEDITQuestionCorrect] = useState("");
     const [EDITquestionLevel, setEDITQuestionLevel] = useState(0);
+    const [EDITquestionCategory, setEDITQuestionCategory] = useState(0);
 
     const [EDITquestionAId, setEDITQuestionAId] = useState(0);
     const [EDITquestionBId, setEDITQuestionBId] = useState(0);
@@ -298,6 +300,7 @@ export default function QuestionsData() {
             console.log(data);
             setEDITQuestionTitle(data.problem.description);
             setEDITQuestionLevel(data.problem.level - 1);
+            setEDITQuestionCategory(data.problem.theme);
             console.log(EDITquestionLevel);
             setEDITQuestionA(data.options[0].description);
             setEDITQuestionB(data.options[1].description);
@@ -370,6 +373,7 @@ export default function QuestionsData() {
                     },
                 ],
                 level: EDITquestionLevel + 1,
+                category: EDITquestionCategory + 1,
             });
             setOpenEdit(false);
             console.log(teste);
@@ -571,6 +575,23 @@ export default function QuestionsData() {
                 </Question>
                 <Level>
                     <Stack spacing={1} sx={{ width: 300 }}>
+                        <TextField
+                            select
+                            label="Selecione a categoria"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            variant="outlined"
+                            style={{ marginBottom: 30, width: "100%" }}
+                        >
+                            {Categories.map((cat) => (
+                                <MenuItem key={cat.category} value={cat.value}>
+                                    {cat.category}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Stack>
+
+                    <Stack spacing={1} sx={{ width: 300 }}>
                         <Autocomplete
                             //{...defaultProps}
                             options={options}
@@ -761,6 +782,30 @@ export default function QuestionsData() {
                     />
                 </Question>
                 <Level>
+                    <Stack spacing={1} sx={{ width: 300 }}>
+                        <TextField
+                            select
+                            label="Selecione a categoria"
+                            value={category[EDITquestionCategory]}
+                            onChange={(event, newValue) => {
+                                console.log(
+                                    Categories.indexOf(newValue),
+                                    "AAA",
+                                );
+                                setEDITQuestionCategory(
+                                    Categories.indexOf(newValue),
+                                );
+                            }}
+                            variant="outlined"
+                            style={{ marginBottom: 30, width: "100%" }}
+                        >
+                            {Categories.map((cat) => (
+                                <MenuItem key={cat.category} value={cat.value}>
+                                    {cat.category}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Stack>
                     <Stack spacing={1} sx={{ width: 300 }}>
                         <Autocomplete
                             //{...defaultProps}
