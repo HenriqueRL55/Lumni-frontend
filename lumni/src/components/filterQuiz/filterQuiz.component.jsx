@@ -32,7 +32,6 @@ const options = [
 function FilterQuizData(name, setName, fetchQuestions) {
     const [questionLevel, setQuestionLevel] = useState("");
     const [category, setCategory] = useState("");
-    const [difficulty, setDifficulty] = useState("");
     const [error, setError] = useState(false);
 
     const navigate = useNavigate();
@@ -76,7 +75,7 @@ function FilterQuizData(name, setName, fetchQuestions) {
                 </Typography>
                 <ContainerRow>
                     <Text>
-                        Selecione a categoria e seu nível de conhecimento para
+                        Selecione a categoria para
                         gerar o quiz que deseja realizar!
                     </Text>
                     <Filters>
@@ -94,23 +93,6 @@ function FilterQuizData(name, setName, fetchQuestions) {
                                 </MenuItem>
                             ))}
                         </TextField>
-                        <Autocomplete
-                            //{...defaultProps}
-                            options={options}
-                            id="disable-close-on-select"
-                            disableCloseOnSelect
-                            onChange={(event, newValue) => {
-                                setQuestionLevel(options.indexOf(newValue));
-                            }}
-                            //value={options[questionLevel]} usar no edit
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Nível da Questão"
-                                    variant="standard"
-                                />
-                            )}
-                        />
                     </Filters>
                     <ButtonCont>
                         <Button

@@ -37,7 +37,7 @@ function QuizData() {
                 const category_name = Categories.find((item) => item.value == Value.category);
                 const player = await api.get(`/findUser/${id}`);
 
-                console.log(category_name.category, );
+                console.log(category_name);
                 var response;
 
                 if(player.data.player.length == 0){
@@ -46,11 +46,9 @@ function QuizData() {
                 } else {
                     response = await api.get(`/randomProblemByTheme/${player.data.player[0].id}/theme/${category_name.value}`);
                 }
-                
 
                 const letras = ["A)", "B)", "C)", "D)", "E)"];
                 const array_obj = [response.data];
-                console.log(array_obj);
                 const newObject = array_obj.map((item, index) => {
                     return {
                         pergunta:{

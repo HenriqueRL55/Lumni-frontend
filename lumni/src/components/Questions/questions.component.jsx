@@ -22,7 +22,7 @@ import Button from "@mui/material/Button";
 import { lightGreen, red } from "@mui/material/colors";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -253,7 +253,6 @@ export default function QuestionsData() {
     const classes = useStyles();
     const [rows, setRows] = useState([]);
     const [openRemove, setOpenRemove] = useState(false);
-    const [category, setCategory] = useState("");
     const [RemoveId, setRemoveId] = useState();
     const [EditId, setEditId] = useState(0);
 
@@ -265,6 +264,7 @@ export default function QuestionsData() {
     const [questionE, setQuestionE] = useState("");
     const [questionCorrect, setQuestionCorrect] = useState("");
     const [questionLevel, setQuestionLevel] = useState("");
+    const [category, setCategory] = useState(0);
 
     const [EDITquestionTitle, setEDITQuestionTitle] = useState("");
     const [EDITquestionA, setEDITQuestionA] = useState("");
@@ -282,6 +282,7 @@ export default function QuestionsData() {
     const [EDITquestionDId, setEDITQuestionDId] = useState(0);
     const [EDITquestionEId, setEDITQuestionEId] = useState(0);
 
+
     const [questionsDependent, setQuestionsDependent] = useState(false);
 
     useEffect(() => {
@@ -297,11 +298,12 @@ export default function QuestionsData() {
     async function getQuestionToEdit(EditId) {
         try {
             const { data } = await api.get(`/findProblem/${EditId}`);
-            console.log(data);
+            console.log(data)
+            
             setEDITQuestionTitle(data.problem.description);
             setEDITQuestionLevel(data.problem.level - 1);
             setEDITQuestionCategory(data.problem.theme);
-            console.log(EDITquestionLevel);
+            
             setEDITQuestionA(data.options[0].description);
             setEDITQuestionB(data.options[1].description);
             setEDITQuestionC(data.options[2].description);
@@ -333,16 +335,7 @@ export default function QuestionsData() {
 
     async function handleEditQuestion() {
         try {
-            console.log("Editando questão");
-            console.log(EDITquestionTitle);
-            console.log(EDITquestionA);
-            console.log(EDITquestionB);
-            console.log(EDITquestionC);
-            console.log(EDITquestionD);
-            console.log(EDITquestionE);
-            console.log("questao correta " + EDITquestionCorrect);
-            console.log(" LEVEL DA QUESTAO" + EDITquestionLevel);
-
+           
             const teste = await api.put(`/problems/${EditId}`, {
                 description: EDITquestionTitle,
                 options: [
@@ -373,10 +366,10 @@ export default function QuestionsData() {
                     },
                 ],
                 level: EDITquestionLevel + 1,
-                category: EDITquestionCategory + 1,
+                theme: EDITquestionCategory 
             });
             setOpenEdit(false);
-            console.log(teste);
+            
             questionsDependent
                 ? setQuestionsDependent(false)
                 : setQuestionsDependent(true);
@@ -390,7 +383,6 @@ export default function QuestionsData() {
             console.log("Removendo questão");
             const teste = await api.delete(`/problems/${RemoveId}`);
             setOpenRemove(false);
-            console.log(teste);
             questionsDependent
                 ? setQuestionsDependent(false)
                 : setQuestionsDependent(true);
@@ -400,16 +392,6 @@ export default function QuestionsData() {
     }
 
     async function handleNewQuestion() {
-        console.log(
-            questionTitle,
-            questionA,
-            questionB,
-            questionC,
-            questionD,
-            questionE,
-            questionCorrect,
-        );
-        console.log(questionLevel);
 
         if (
             questionTitle === "" ||
@@ -449,10 +431,11 @@ export default function QuestionsData() {
                         ],
                         level: questionLevel + 1,
                         tips: "teste",
+                        theme: category
+                        
                     },
                 ],
             });
-            console.log(teste);
             setOpen(false);
             questionsDependent
                 ? setQuestionsDependent(false)
@@ -598,7 +581,6 @@ export default function QuestionsData() {
                             id="disable-close-on-select"
                             disableCloseOnSelect
                             onChange={(event, newValue) => {
-                                console.log(options.indexOf(newValue));
                                 setQuestionLevel(options.indexOf(newValue));
                             }}
                             //value={options[questionLevel]} usar no edit
@@ -786,14 +768,10 @@ export default function QuestionsData() {
                         <TextField
                             select
                             label="Selecione a categoria"
-                            value={category[EDITquestionCategory]}
+                            value={EDITquestionCategory}
                             onChange={(event, newValue) => {
-                                console.log(
-                                    Categories.indexOf(newValue),
-                                    "AAA",
-                                );
                                 setEDITQuestionCategory(
-                                    Categories.indexOf(newValue),
+                                    event.target.value
                                 );
                             }}
                             variant="outlined"
@@ -813,7 +791,6 @@ export default function QuestionsData() {
                             id="disable-close-on-select"
                             disableCloseOnSelect
                             onChange={(event, newValue) => {
-                                console.log(options.indexOf(newValue));
                                 setEDITQuestionLevel(options.indexOf(newValue));
                             }}
                             value={options[EDITquestionLevel]}
