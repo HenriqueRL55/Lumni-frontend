@@ -1,8 +1,8 @@
 import styled from "styled-components/macro";
 
 export const Container = styled.div`
-    margin: 0 auto;
-    background-color: #261132;
+    margin: 50px auto;
+    background-color: #fff;
     width: 60%;
     min-height: 200px;
     height: min-content;
@@ -17,12 +17,12 @@ export const Pontuação = styled.div`
     font-size: 24px;
     justify-content: center;
     align-items: center;
-    color: #fafafa;
+    color: #03a9f4;
 `;
 
 export const InfoPerguntas = styled.div`
     width: 100%;
-    color: #fafafa;
+    color: #03a9f4;
     position: relative;
 `;
 
@@ -32,11 +32,12 @@ export const ContagemPerguntas = styled.div`
     align-items: baseline;
     margin-bottom: 20px;
     font-size: 28px;
-    color: #fafafa;
+    color: #03a9f4;
 `;
 
 export const Pergunta = styled.div`
     margin-bottom: 12px;
+    color: #03a9f4;
 `;
 
 export const GrupoResposta = styled.div`
@@ -44,6 +45,7 @@ export const GrupoResposta = styled.div`
     flex: 1 1 200px;
     justify-content: center;
     align-items: baseline;
+    color: #03a9f4;
 `;
 
 export const Resposta = styled.div`
@@ -51,18 +53,17 @@ export const Resposta = styled.div`
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    color: #fafafa;
+    color: #03a9f4; ;
 `;
 
 export const ButtonAnswer = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
     width: 100%;
     font-size: 16px;
-    color: #fff;
-    background-color: #ba5c12;
+    color: #03a9f4;
+    background-color: #fff;
     border-radius: 8px;
     padding: 8px;
     border: 3px solid #3e2f5b;
@@ -70,6 +71,6 @@ export const ButtonAnswer = styled.div`
     margin: 0 12px 10px;
     transition: 0.6s;
     &:hover {
-        background-color: #261132;
+        background-color: #ddd;
     }
 `;
