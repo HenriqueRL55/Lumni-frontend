@@ -84,8 +84,7 @@ export default function Register() {
                                     href="/"
                                     component="a"
                                     sx={{
-                                        mr: 2,
-                                        display: { xs: "none", md: "flex" },
+                                        display: "flex",
                                         fontFamily: "monospace",
                                         fontWeight: 700,
                                         justifyContent: "center",
