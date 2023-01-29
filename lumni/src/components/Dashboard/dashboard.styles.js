@@ -22,6 +22,12 @@ export const Container = styled.div`
 export const ContainerRow = styled.div`
     display: grid;
     grid-template-areas: "column1 column2";
+
+    @media screen and (max-width: 860px) {
+        grid-template-areas:
+            "column2 "
+            "column1";
+    }
 `;
 
 export const Column1 = styled.div`
@@ -47,6 +53,9 @@ export const Character = styled.div`
     border-bottom: 1px solid #e0e0e0;
     align-items: center;
     justify-items: center;
+    @media screen and (max-width: 860px) {
+        height: 120px;
+    }
 `;
 
 export const Chart2 = styled.div`
@@ -55,6 +64,10 @@ export const Chart2 = styled.div`
     align-items: center;
     justify-items: center;
     padding-top: 14px;
+    @media screen and (max-width: 860px) {
+        height: 80px;
+        border-bottom: 1px solid #e0e0e0;
+    }
 `;
 
 export const InsideColumnFilter = styled.div`

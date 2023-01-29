@@ -21,7 +21,6 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/auth";
 
 const pages = ["Perguntas", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const useStyles = makeStyles((theme) => ({
     forgotPasswordButton: {
@@ -54,6 +53,14 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 600,
         padding: "20px 10px",
         color: "#fafafa",
+        textDecoration: "none",
+        fontFamily: "Roboto",
+    },
+    letterMenu1: {
+        fontSize: "16px",
+        fontWeight: 400,
+        padding: "10px",
+        color: " #03a9f4",
         textDecoration: "none",
         fontFamily: "Roboto",
     },
@@ -137,16 +144,32 @@ const ResponsiveAppBar = () => {
                                 display: { xs: "block", md: "none" },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
-                                >
-                                    <Typography textAlign="center">
-                                        {page}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
+                            <MenuItem onClick={handleCloseNavMenu}>
+                                <Typography textAlign="center">
+                                    <NavLink
+                                        className={classes.letterMenu1}
+                                        to="/Dashboard"
+                                    >
+                                        <ListItemButton>
+                                            Dashboard
+                                        </ListItemButton>
+                                    </NavLink>
+                                    <NavLink
+                                        className={classes.letterMenu1}
+                                        to="/Questions"
+                                    >
+                                        <ListItemButton>
+                                            Perguntas
+                                        </ListItemButton>
+                                    </NavLink>
+                                    <NavLink
+                                        className={classes.letterMenu1}
+                                        to="/Filter"
+                                    >
+                                        <ListItemButton>Quiz</ListItemButton>
+                                    </NavLink>
+                                </Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
 

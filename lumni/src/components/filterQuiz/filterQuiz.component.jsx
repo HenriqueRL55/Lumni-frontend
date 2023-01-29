@@ -62,7 +62,7 @@ function FilterQuizData(name, setName, fetchQuestions) {
                     noWrap
                     component="a"
                     sx={{
-                        display: { xs: "none", md: "flex" },
+                        display: "flex",
                         fontFamily: "monospace",
                         fontSize: 36,
                         fontWeight: 700,
@@ -75,8 +75,8 @@ function FilterQuizData(name, setName, fetchQuestions) {
                 </Typography>
                 <ContainerRow>
                     <Text>
-                        Selecione a categoria para
-                        gerar o quiz que deseja realizar!
+                        Selecione a categoria para gerar o quiz que deseja
+                        realizar!
                     </Text>
                     <Filters>
                         <TextField
