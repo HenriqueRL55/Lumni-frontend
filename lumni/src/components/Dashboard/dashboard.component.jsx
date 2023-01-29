@@ -138,6 +138,16 @@ export default function DashboardData() {
     const [dataChart, setDataChart] = useState([]);
     const classes = useStyles();
 
+    //pegar os dados do player
+    // useEffect(() => {
+    //     async function getPlayerInfo() {
+    //         const response = await api.get("/highscore");
+    //         const highscore = response.data.players;
+    //         console.log(highscore, "testando score");
+    //     }
+    //     getPlayerInfo();
+    // }, []);
+
     const userLevel = "5";
     return (
         <>
@@ -147,41 +157,6 @@ export default function DashboardData() {
                 <Title className={classes.styleTitle}>Dashboard</Title>{" "}
                 <ContainerRow>
                     <Column1>
-                        <InsideColumnFilter>
-                            <LevelFilter>
-                                <Autocomplete
-                                    // {...defaultPropsYear}
-                                    id="level-selector"
-                                    autoSelect
-                                    disableClearable
-                                    className={classes.option}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Filtrar por nível"
-                                            variant="outlined"
-                                        />
-                                    )}
-                                />
-                            </LevelFilter>
-
-                            <UserFilter>
-                                <Autocomplete
-                                    // {...defaultPropsSa}
-                                    id="user-selector"
-                                    autoSelect
-                                    className={classes.option}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Filtrar por usuário"
-                                            variant="outlined"
-                                        />
-                                    )}
-                                />
-                            </UserFilter>
-                        </InsideColumnFilter>
-
                         <InsideColumnChart>
                             <Info>
                                 {data.length >= 1 && (
