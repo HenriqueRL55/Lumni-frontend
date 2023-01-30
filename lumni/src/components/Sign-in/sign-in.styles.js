@@ -19,6 +19,9 @@ export const BlueBackground = styled.div`
     height: 420px;
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 5px 45px rgba(0, 0, 0, 0.15);
+    @media screen and (max-width: 900px) {
+        display: none;
+    }
 `;
 
 export const BoxSignIn = styled.div`
@@ -54,6 +57,11 @@ export const FormBox = styled.div`
     align-items: center;
     box-shadow: 0 5px 45px rgba(0, 0, 0, 0.25);
     transition: 0.5s ease-in-out;
+    @media screen and (max-width: 900px) {
+        margin: auto;
+        position: relative;
+        width: 70%;
+    }
 `;
 
 export const Container = styled.div`
@@ -86,4 +94,13 @@ export const MainTitle = styled.h1`
 export const PasswordContainer = styled.div`
     display: flex;
     margin: 12px 0;
+`;
+
+export const BoxSignUp2 = styled.div`
+    display: none;
+
+    @media screen and (max-width: 900px) {
+        display: flex;
+        justify-content: center;
+    }
 `;

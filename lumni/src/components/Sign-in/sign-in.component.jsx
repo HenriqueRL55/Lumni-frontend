@@ -9,6 +9,7 @@ import {
     BoxSignIn,
     BoxSignUp,
     FormBox,
+    BoxSignUp2,
 } from "./sign-in.styles";
 
 /* Componentes */
@@ -127,7 +128,7 @@ export default function SignIn() {
                                 noWrap
                                 component="a"
                                 sx={{
-                                    display: { xs: "none", md: "flex" },
+                                    display: "flex",
                                     fontFamily: "monospace",
                                     fontWeight: 700,
                                     justifyContent: "center",
@@ -183,6 +184,19 @@ export default function SignIn() {
                             >
                                 Entrar
                             </Button>
+                            <BoxSignUp2>
+                                <NavLink
+                                    className={classes.signUp}
+                                    to="/register"
+                                >
+                                    <Button
+                                        className={classes.login}
+                                        //onClick={handleSubmitRegister}
+                                    >
+                                        Cadastrar
+                                    </Button>
+                                </NavLink>
+                            </BoxSignUp2>
                         </FieldsContainer>
                     </FormBox>
                 </Container>
