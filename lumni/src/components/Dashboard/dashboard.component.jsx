@@ -208,7 +208,7 @@ export default function DashboardData() {
                                 {data.length >= 1 && (
                                     <div className={classes.progressTextRight}>
                                         <h3 className={classes.h3}>
-                                            {playerData.correctAnswers + playerData.wrongAnswers}
+                                            {playerData.correctAnswers + playerData.wrongAnswers ? playerData.correctAnswers + playerData.wrongAnswers : "0"}
                                         </h3>{" "}
                                         questões respondidas. <br />
                                         <h3 className={classes.h3}>
