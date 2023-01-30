@@ -46,6 +46,9 @@ const data = [
     { name: "FDD", value: 200 },
 ];
 
+
+
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const RADIAN = Math.PI / 180;
@@ -76,6 +79,7 @@ const renderCustomizedLabel = ({
 };
 
 function LinearProgressWithLabel(props) {
+    
     return (
         <Box display="flex" alignItems="center">
             <Box width="100%" mr={1}>
@@ -133,12 +137,50 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const themenome = [
+    { name: "Scrum", value: 1 },
+    { name: "Grouwth Hacking", value: 2 },
+    { name: "Google Design Sprint", value: 3 },
+    { name: "FDD", value: 4 },
+];
+
+const teste = {
+    "numberOfQuestionsByThemes": [
+        {
+            "theme": 1,
+            "questions": "12"
+        },
+        {
+            "theme": 2,
+            "questions": "6"
+        }
+    ],
+    "total": 2
+}
+
 export default function DashboardData() {
     const [progress, setProgress] = useState(0);
     const [dataChart, setDataChart] = useState([]);
     const classes = useStyles();
-
+    const [grafico,setgrafico] = useState()
     const userLevel = "5";
+
+
+    useEffect(() => {
+        function eae (teste) {
+            const dados = teste.map((sim) => {
+                return (
+                    {
+                        name: themenome[sim.theme].name,
+                        value: sim.questions
+                    }
+                )
+            })
+            setgrafico(dados)
+        }
+        eae(teste.numberOfQuestionsByThemes)
+    }, []);
+
     return (
         <>
             {" "}
@@ -147,41 +189,6 @@ export default function DashboardData() {
                 <Title className={classes.styleTitle}>Dashboard</Title>{" "}
                 <ContainerRow>
                     <Column1>
-                        <InsideColumnFilter>
-                            <LevelFilter>
-                                <Autocomplete
-                                    // {...defaultPropsYear}
-                                    id="level-selector"
-                                    autoSelect
-                                    disableClearable
-                                    className={classes.option}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Filtrar por nível"
-                                            variant="outlined"
-                                        />
-                                    )}
-                                />
-                            </LevelFilter>
-
-                            <UserFilter>
-                                <Autocomplete
-                                    // {...defaultPropsSa}
-                                    id="user-selector"
-                                    autoSelect
-                                    className={classes.option}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Filtrar por usuário"
-                                            variant="outlined"
-                                        />
-                                    )}
-                                />
-                            </UserFilter>
-                        </InsideColumnFilter>
-
                         <InsideColumnChart>
                             <Info>
                                 {data.length >= 1 && (
@@ -207,6 +214,7 @@ export default function DashboardData() {
                                             )}
                                         </h3>{" "}
                                         questões registradas.
+                                        
                                         <br />
                                         <h3 className={classes.h3}>
                                             {data.reduce(
