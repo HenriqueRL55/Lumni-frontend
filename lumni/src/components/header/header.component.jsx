@@ -20,6 +20,8 @@ import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth";
 
+import mascote from "./mascote.png";
+
 const pages = ["Perguntas", "Pricing", "Blog"];
 
 const useStyles = makeStyles((theme) => ({
@@ -223,12 +225,16 @@ const ResponsiveAppBar = () => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip title="Abrir configurações">
                             <IconButton
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}
                             >
-                                <Avatar alt="Icone Perfil" />
+                                <img
+                                    src={mascote}
+                                    style={{ width: "80px", height: "80px" }}
+                                    alt="Icone Perfil"
+                                />
                             </IconButton>
                         </Tooltip>
                         <Menu
