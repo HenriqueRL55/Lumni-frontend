@@ -38,6 +38,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
+import api from "../../services/api";
 
 const data = [
     { name: "Scrum", value: 400 },
@@ -45,6 +46,8 @@ const data = [
     { name: "Google Design Sprint", value: 300 },
     { name: "FDD", value: 200 },
 ];
+
+
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -76,6 +79,7 @@ const renderCustomizedLabel = ({
 };
 
 function LinearProgressWithLabel(props) {
+    
     return (
         <Box display="flex" alignItems="center">
             <Box width="100%" mr={1}>
@@ -133,22 +137,64 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const themenome = [
+    { name: "Scrum", value: 1 },
+    { name: "FDD", value: 2 },
+    { name: "Grouwth Hacking", value: 3 },
+    { name: "Google Design Sprint", value: 4 },
+];
+
+const teste = {
+    "numberOfQuestionsByThemes": [
+        {
+            "theme": 1,
+            "questions": "12"
+        },
+        {
+            "theme": 2,
+            "questions": "6"
+        }
+    ],
+    "total": 2
+}
+
 export default function DashboardData() {
     const [progress, setProgress] = useState(0);
     const [dataChart, setDataChart] = useState([]);
     const classes = useStyles();
+    const [grafico,setgrafico] = useState([])
+    const [totalQuestions, setTotalQuestions] = useState(0);
+    const [playerData, setPlayerData] = useState({});
 
-    //pegar os dados do player
-    // useEffect(() => {
-    //     async function getPlayerInfo() {
-    //         const response = await api.get("/highscore");
-    //         const highscore = response.data.players;
-    //         console.log(highscore, "testando score");
-    //     }
-    //     getPlayerInfo();
-    // }, []);
 
-    const userLevel = "5";
+    useEffect(() => {
+        async function data () {
+            const { data } = await api.get("/numberOfQuestionsByThemes");
+            const dados = data.numberOfQuestionsByThemes.map((dados) => {
+                return (
+                    {
+                        name: themenome[dados.theme - 1].name,
+                        value: parseInt(dados.questions)
+                    }
+                )
+            })
+            setTotalQuestions(data.total)
+            setgrafico(dados)
+        }
+        data()
+    }, []);
+
+    useEffect(() => {
+        async function data () {        
+            const id = JSON.parse(localStorage.getItem("user")).id;  
+            const player = await api.get(`/findUser/${id}`);
+            const { data } = await api.get(`/answersByPlayer/${player.data.player[0].id}`);
+            console.log(data)
+            setPlayerData(data);
+        }
+        data()
+    }, []);
+
     return (
         <>
             {" "}
@@ -162,33 +208,17 @@ export default function DashboardData() {
                                 {data.length >= 1 && (
                                     <div className={classes.progressTextRight}>
                                         <h3 className={classes.h3}>
-                                            {data.find(
-                                                (curr) =>
-                                                    curr.status === "Aceita",
-                                            )
-                                                ? data.find(
-                                                      (curr) =>
-                                                          curr.status ===
-                                                          "Aceita",
-                                                  ).countedProposals
-                                                : 0}
+                                            {playerData.correctAnswers + playerData.wrongAnswers}
                                         </h3>{" "}
                                         questões respondidas. <br />
                                         <h3 className={classes.h3}>
-                                            {data.reduce(
-                                                (acc, curr) =>
-                                                    acc + curr.countedProposals,
-                                                0,
-                                            )}
+                                            {totalQuestions}
                                         </h3>{" "}
                                         questões registradas.
+                                        
                                         <br />
                                         <h3 className={classes.h3}>
-                                            {data.reduce(
-                                                (acc, curr) =>
-                                                    acc + curr.countedProposals,
-                                                0,
-                                            )}
+                                            {playerData.average ? playerData.average : "0"}
                                         </h3>{" "}
                                         média de acertos.
                                     </div>
@@ -197,21 +227,17 @@ export default function DashboardData() {
                             <Chart>
                                 <PieChart width={180} height={180}>
                                     <Pie
-                                        data={data}
+                                        data={grafico}
                                         labelLine={false}
                                         label={renderCustomizedLabel}
                                         outerRadius={80}
                                         fill="#8884d8"
                                         dataKey="value"
                                     >
-                                        {data.map((entry, index) => (
+                                        {grafico.map((entry, index) => (
                                             <Cell
                                                 key={`cell-${index}`}
-                                                fill={
-                                                    COLORS[
-                                                        index % COLORS.length
-                                                    ]
-                                                }
+                                                fill={COLORS[index % COLORS.length]}
                                             />
                                         ))}
                                     </Pie>
@@ -222,15 +248,14 @@ export default function DashboardData() {
                     </Column1>
                     <Column2>
                         <Character>
-                            <TagFacesIcon />
-
-                            {/* {userAverage >= 80 ? (
+                            { playerData.score >= 80 ? (
                                 <TagFacesIcon/>
-                            ) : userAverage <= 79 && userAverage >=50 (
+                            ) : playerData.score <= 79 && playerData.score >=50 ? (
                                 <SentimentVeryDissatisfiedIcon />
-                            ) ? userAverage <=49 ( <FaceIcon/>) : null} */}
+                            ) : playerData.score <=49 ? ( <FaceIcon/>) : null
+                            }
                         </Character>
-                        <Chart2>Seu nível de jogador é {userLevel}</Chart2>
+                        <Chart2>Seu nível de jogador é {playerData.player_level}</Chart2>
                     </Column2>
                 </ContainerRow>
             </Container>
